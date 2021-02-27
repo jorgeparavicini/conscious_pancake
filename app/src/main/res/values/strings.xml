@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">CautiousPancake</string>
+    <string name="app_name">Conscious Pancake</string>
+    <string name="play">Play</string>
+    <string name="history">History</string>
 </resources>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "555032613391",
+    "project_id": "conscious-pancake",
+    "storage_bucket": "conscious-pancake.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555032613391:android:299fb54b3c8da054e5897a",
+        "android_client_info": {
+          "package_name": "ch.ffhs.conscious_pancake"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "555032613391-f9q6a9l1o3m7fccfmcbi18ahfotgp8vo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.ffhs.conscious_pancake",
+            "certificate_hash": "c23b5da0b55f57a189084e1c797fe69ff2f82c5d"
+          }
+        },
+        {
+          "client_id": "555032613391-jh84eg8ulvgsi17tgt80nr6aq9lalr7c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUeX1U3QOFzYYXL2CnO5ugY8uZD3HodDs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "555032613391-jh84eg8ulvgsi17tgt80nr6aq9lalr7c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
