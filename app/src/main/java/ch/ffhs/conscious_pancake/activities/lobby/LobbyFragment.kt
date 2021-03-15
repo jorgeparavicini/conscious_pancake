@@ -9,18 +9,18 @@ import androidx.recyclerview.widget.RecyclerView
 import ch.ffhs.conscious_pancake.R
 
 class LobbyFragment : Fragment(R.layout.activity_lobby) {
-    private val data: Array<Lobby> =
+    private val data: Array<LobbyItem> =
         arrayOf(
-            Lobby("Test 1"),
-            Lobby("Test 2"),
-            Lobby("Test 3"),
-            Lobby("Test 4"),
-            Lobby("Test 5"),
-            Lobby("Test 5"),
-            Lobby("Test 5"),
-            Lobby("Test 5"),
-            Lobby("Test 5"),
-            Lobby("Test 5")
+            LobbyItem("Test 1"),
+            LobbyItem("Test 2"),
+            LobbyItem("Test 3"),
+            LobbyItem("Test 4"),
+            LobbyItem("Test 5"),
+            LobbyItem("Test 5"),
+            LobbyItem("Test 5"),
+            LobbyItem("Test 5"),
+            LobbyItem("Test 5"),
+            LobbyItem("Test 5")
 
 
         )

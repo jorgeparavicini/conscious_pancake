@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ch.ffhs.conscious_pancake.R
 
-class LobbyAdapter(private val dataSet: Array<Lobby>) :
+class LobbyAdapter(private val dataSet: Array<LobbyItem>) :
     RecyclerView.Adapter<LobbyAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
