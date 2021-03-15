@@ -7,4 +7,7 @@
     <string name="statistics">Statistics</string>
     <string name="lobby">Lobby</string>
     <string name="profile">Profile</string>
+    <string name="games_in_progress">Games in progress</string>
+    <string name="watch">watch</string>
+    <string name="new_game">New Game</string>
 </resources>

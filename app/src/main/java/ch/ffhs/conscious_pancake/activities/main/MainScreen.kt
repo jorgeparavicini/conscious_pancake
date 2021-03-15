@@ -1,12 +1,11 @@
 package ch.ffhs.conscious_pancake.activities.main
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import ch.ffhs.conscious_pancake.R
 import ch.ffhs.conscious_pancake.activities.HistoryFragment
-import ch.ffhs.conscious_pancake.activities.LobbyFragment
+import ch.ffhs.conscious_pancake.activities.lobby.LobbyFragment
 import ch.ffhs.conscious_pancake.activities.ProfileFragment
 
 enum class MainScreen(
