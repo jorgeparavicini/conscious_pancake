@@ -4,7 +4,7 @@ import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import ch.ffhs.conscious_pancake.R
-import ch.ffhs.conscious_pancake.activities.HistoryFragment
+import ch.ffhs.conscious_pancake.activities.history.HistoryFragment
 import ch.ffhs.conscious_pancake.activities.lobby.LobbyFragment
 import ch.ffhs.conscious_pancake.activities.ProfileFragment
 

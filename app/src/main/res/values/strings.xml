@@ -10,4 +10,6 @@
     <string name="games_in_progress">Games in progress</string>
     <string name="watch">watch</string>
     <string name="new_game">New Game</string>
+    <string name="won">Won</string>
+    <string name="lost">Lost</string>
 </resources>
