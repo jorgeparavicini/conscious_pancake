@@ -14,7 +14,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        AuthUI.getInstance().signOut(this)
         createSignInIntent()
     }
 
@@ -37,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
             val response = IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_OK) {
-                val user = FirebaseAuth.getInstance().currentUser;
+                val user = FirebaseAuth.getInstance().currentUser
             }
         }
     }

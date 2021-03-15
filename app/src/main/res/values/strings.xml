@@ -2,4 +2,9 @@
     <string name="app_name">Conscious Pancake</string>
     <string name="play">Play</string>
     <string name="history">History</string>
+    <string name="player">Player #</string>
+    <string name="app_image">App_Image</string>
+    <string name="statistics">Statistics</string>
+    <string name="lobby">Lobby</string>
+    <string name="profile">Profile</string>
 </resources>
