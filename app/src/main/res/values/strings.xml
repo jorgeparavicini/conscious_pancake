@@ -12,4 +12,13 @@
     <string name="new_game">New Game</string>
     <string name="won">Won</string>
     <string name="lost">Lost</string>
+    <string name="profile_image_description">Profile image description</string>
+    <string name="change_profile_picture">Change profile picture</string>
+    <string name="username">Username</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="email_address">Email address</string>
+    <string name="profile_uid">UID</string>
+    <string name="unexpected_error">An unexpected error occurred</string>
+    <string name="update_profile">Update Profile</string>
 </resources>
