@@ -3,6 +3,9 @@ package ch.ffhs.conscious_pancake.activities.profile
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -44,6 +47,11 @@ class ProfileFragment(private val user: FirebaseUser = FirebaseAuth.getInstance(
     var isDirty = false
         private set
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -57,6 +65,22 @@ class ProfileFragment(private val user: FirebaseUser = FirebaseAuth.getInstance(
         // Setup event handlers
         view.findViewById<Button>(R.id.profile_change_image).setOnClickListener { takePicture() }
         view.findViewById<Button>(R.id.update_profile_button).setOnClickListener { saveChanges() }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        inflater.inflate(R.menu.profile_fragment_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_edit -> {
+
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     /**

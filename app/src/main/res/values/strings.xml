@@ -21,4 +21,5 @@
     <string name="profile_uid">UID</string>
     <string name="unexpected_error">An unexpected error occurred</string>
     <string name="update_profile">Update Profile</string>
+    <string name="edit">Edit</string>
 </resources>

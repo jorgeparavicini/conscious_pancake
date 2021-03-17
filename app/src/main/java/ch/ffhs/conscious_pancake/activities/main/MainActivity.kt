@@ -3,6 +3,7 @@ package ch.ffhs.conscious_pancake.activities.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toolbar
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 displayLoginActivity()
             } else {
                 setContentView(R.layout.activity_main)
+                setSupportActionBar(findViewById(R.id.toolbar))
                 initializeComponents()
             }
         }
