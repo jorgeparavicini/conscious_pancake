@@ -1,6 +1,5 @@
-package ch.ffhs.conscious_pancake.activities.history
+package ch.ffhs.conscious_pancake.ui.history
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

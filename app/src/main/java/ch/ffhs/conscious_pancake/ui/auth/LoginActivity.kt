@@ -1,4 +1,4 @@
-package ch.ffhs.conscious_pancake.auth
+package ch.ffhs.conscious_pancake.ui.auth
 
 import android.app.Activity
 import android.content.Intent

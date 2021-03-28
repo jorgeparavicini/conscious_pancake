@@ -1,4 +1,4 @@
-package ch.ffhs.conscious_pancake.activities.lobby
+package ch.ffhs.conscious_pancake.ui.lobby
 
 import android.view.LayoutInflater
 import android.view.View

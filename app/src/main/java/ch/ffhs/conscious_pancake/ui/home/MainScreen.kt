@@ -1,12 +1,12 @@
-package ch.ffhs.conscious_pancake.activities.main
+package ch.ffhs.conscious_pancake.ui.home
 
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import ch.ffhs.conscious_pancake.R
-import ch.ffhs.conscious_pancake.activities.history.HistoryFragment
-import ch.ffhs.conscious_pancake.activities.lobby.LobbyFragment
-import ch.ffhs.conscious_pancake.activities.profile.ProfileFragment
+import ch.ffhs.conscious_pancake.ui.history.HistoryFragment
+import ch.ffhs.conscious_pancake.ui.lobby.LobbyFragment
+import ch.ffhs.conscious_pancake.ui.profile.ProfileFragment
 
 enum class MainScreen(
     @IdRes val menuItemId: Int,

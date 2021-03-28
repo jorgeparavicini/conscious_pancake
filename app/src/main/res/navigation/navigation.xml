@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/loginDispatcher">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="ch.ffhs.conscious_pancake.ui.home.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home">
+        <argument
+            android:name="user_id"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginDispatcher"
+        android:name="ch.ffhs.conscious_pancake.ui.login_dispatcher.LoginDispatcherFragment"
+        android:label="LoginDispatcher" >
+        <action
+            android:id="@+id/action_loginDispatcher_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+</navigation>

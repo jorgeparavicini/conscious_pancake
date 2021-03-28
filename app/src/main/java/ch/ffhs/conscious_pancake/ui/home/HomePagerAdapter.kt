@@ -1,10 +1,11 @@
-package ch.ffhs.conscious_pancake.activities.main
+package ch.ffhs.conscious_pancake.ui.home
 
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class MainPagerAdapter(fa: FragmentActivity) :
+class HomePagerAdapter(private val args: Bundle?, fa: FragmentActivity) :
     FragmentStateAdapter(fa) {
 
     private val screens = arrayListOf<MainScreen>()
@@ -26,6 +27,8 @@ class MainPagerAdapter(fa: FragmentActivity) :
     }
 
     override fun createFragment(position: Int): Fragment {
+        val fragment = screens[position].fragment
+        fragment.arguments = args
         return screens[position].fragment
     }
 }

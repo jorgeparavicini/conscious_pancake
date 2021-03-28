@@ -13,6 +13,7 @@
     </queries>
 
     <application
+        android:name=".ConsciousPancakeApp"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -20,14 +21,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ConsciousPancake">
-        <activity android:name=".activities.main.MainActivity">
+        <activity android:name="ch.ffhs.conscious_pancake.ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".auth.LoginActivity" />
+        <activity android:name="ch.ffhs.conscious_pancake.ui.auth.LoginActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
