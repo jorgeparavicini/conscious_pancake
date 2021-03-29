@@ -27,7 +27,8 @@ class LoginDispatcherFragment : Fragment(R.layout.fragment_login_dispatcher) {
             requireView().findNavController()
                 .navigate(LoginDispatcherFragmentDirections.actionLoginDispatcherToHomeFragment(user.uid))
         } else {
-            TODO("Not implemented yet")
+            requireView().findNavController()
+                .navigate(LoginDispatcherFragmentDirections.actionLoginDispatcherToLoginActivity())
         }
     }
 }
