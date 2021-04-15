@@ -1,8 +1,8 @@
 package ch.ffhs.conscious_pancake.repository.contracts
 
 import androidx.lifecycle.LiveData
-import ch.ffhs.conscious_pancake.model.Resource
-import ch.ffhs.conscious_pancake.model.User
+import ch.ffhs.conscious_pancake.vo.Resource
+import ch.ffhs.conscious_pancake.vo.User
 
 interface IUserRepository {
     fun getUser(userId: String): LiveData<Resource<User>>
@@ -10,6 +10,5 @@ interface IUserRepository {
     fun updateUser(
         userId: String,
         user: User,
-        hasImageChanged: Boolean = false
-    ): LiveData<Resource<User>>
+    ): LiveData<Resource<Unit>>
 }

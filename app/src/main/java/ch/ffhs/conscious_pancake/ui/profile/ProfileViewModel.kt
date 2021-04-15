@@ -1,38 +1,55 @@
 package ch.ffhs.conscious_pancake.ui.profile
 
+import android.annotation.SuppressLint
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import ch.ffhs.conscious_pancake.model.Resource
-import ch.ffhs.conscious_pancake.model.User
+import androidx.lifecycle.*
+import ch.ffhs.conscious_pancake.vo.Resource
+import ch.ffhs.conscious_pancake.vo.User
 import ch.ffhs.conscious_pancake.repository.UserRepository
 import ch.ffhs.conscious_pancake.utils.fileName
+import ch.ffhs.conscious_pancake.vo.Status
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val userRepo: UserRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val userRepo: UserRepository, private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    companion object {
-        const val UserIdArgName = "user_id"
-    }
 
-    private val userId: String get() = savedStateHandle.get<String>(UserIdArgName)!!
-    val isEditable: Boolean get() = Firebase.auth.currentUser?.uid == userId
+    /**
+     * The id of the user the connected view should display.
+     */
+    private val userId: String
+        get() = savedStateHandle.get<String>(USER_ID_ARG_NAME)!!
+
+    /**
+     * If the currently logged in user is looking at its own profile enable editing.
+     */
+    val isEditable: Boolean
+        get() = Firebase.auth.currentUser?.uid == userId
 
     private val _isEditing: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>(false)
     }
-    val isEditing: LiveData<Boolean> get() = _isEditing
 
+    /**
+     * Should the editing layout be display or the view layout.
+     */
+    val isEditing: LiveData<Boolean>
+        get() = _isEditing
+
+    private val _errorMessage = MediatorLiveData<String>()
+
+    val errorMessage: LiveData<String>
+        get() = _errorMessage
+
+    /**
+     * The user to be displayed
+     */
     val user: LiveData<Resource<User>> = userRepo.getUser(userId)
+
 
     fun toggleEditing() {
         _isEditing.value = !_isEditing.value!!
@@ -45,6 +62,21 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun saveChanges() {
-        userRepo.updateUser(userId, user.value?.data!!)
+        val update = userRepo.updateUser(userId, user.value!!.data!!)
+        observeResultForErrors(update)
+    }
+
+    // Seems like a bug: adding !! says its safe to remove, but upon removing it, the null error comes.
+    @SuppressLint("NullSafeMutableLiveData")
+    private fun <T> observeResultForErrors(resource: LiveData<Resource<T>>) {
+        _errorMessage.addSource(resource) {
+            if (it.status == Status.ERROR && it.message != null) {
+                _errorMessage.value = it.message
+            }
+        }
+    }
+
+    companion object {
+        const val USER_ID_ARG_NAME = "user_id"
     }
 }

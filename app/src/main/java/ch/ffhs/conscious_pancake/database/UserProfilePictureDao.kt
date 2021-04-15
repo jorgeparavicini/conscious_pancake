@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ch.ffhs.conscious_pancake.R
 import ch.ffhs.conscious_pancake.database.contracts.IUserProfilePictureDao
-import ch.ffhs.conscious_pancake.model.Resource
+import ch.ffhs.conscious_pancake.vo.Resource
 import ch.ffhs.conscious_pancake.utils.fileName
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -51,24 +51,24 @@ class UserProfilePictureDao @Inject constructor(@ApplicationContext private val 
         return result
     }
 
-    override fun uploadImage(userId: String, imageUri: Uri): LiveData<Resource<Uri>> {
+    override fun uploadImage(userId: String, imageUri: Uri): LiveData<Resource<Unit>> {
         Timber.v("Uploading profile picture for user: $userId. Image: ${imageUri.fileName}")
-        val result = MutableLiveData<Resource<Uri>>()
+        val result = MutableLiveData<Resource<Unit>>()
         val storageRef =
             Firebase.storage.getReference(userId + RemoteSavingPath)
         storageRef.putFile(imageUri).addOnCompleteListener {
             if (it.isSuccessful) {
                 Timber.d("Successfully uploaded profile picture for user: $userId. Image: ${imageUri.fileName}")
-                result.value = Resource.success(imageUri)
+                result.value = Resource.success(null)
             } else {
                 Timber.e("Failed to upload profile picture for user: $userId. Image name: ${imageUri.fileName}. Exception: ${it.exception}")
                 result.value =
-                    Resource.error(context.getString(R.string.profile_picture_upload_failed), imageUri)
+                    Resource.error(context.getString(R.string.profile_picture_upload_failed), null)
             }
         }.addOnFailureListener {
             Timber.e("Failed to upload profile picture for user: $userId. Image name: ${imageUri.fileName}. Exception: $it")
             result.value =
-                Resource.error(context.getString(R.string.profile_picture_upload_failed), imageUri)
+                Resource.error(context.getString(R.string.profile_picture_upload_failed), null)
         }
 
         return result

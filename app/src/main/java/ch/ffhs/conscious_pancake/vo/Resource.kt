@@ -1,4 +1,4 @@
-package ch.ffhs.conscious_pancake.model
+package ch.ffhs.conscious_pancake.vo
 
 data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
     companion object {

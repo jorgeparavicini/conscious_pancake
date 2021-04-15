@@ -1,18 +1,15 @@
 package ch.ffhs.conscious_pancake.repository
 
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import ch.ffhs.conscious_pancake.database.UserDao
 import ch.ffhs.conscious_pancake.database.UserProfilePictureDao
-import ch.ffhs.conscious_pancake.model.Resource
-import ch.ffhs.conscious_pancake.model.Status
-import ch.ffhs.conscious_pancake.model.User
 import ch.ffhs.conscious_pancake.repository.contracts.IUserRepository
-import timber.log.Timber
-import java.util.concurrent.ConcurrentHashMap
+import ch.ffhs.conscious_pancake.vo.Resource
+import ch.ffhs.conscious_pancake.vo.Status
+import ch.ffhs.conscious_pancake.vo.User
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,117 +17,69 @@ import javax.inject.Singleton
 class UserRepository @Inject constructor(
     private val userDao: UserDao, private val userProfilePictureDao: UserProfilePictureDao
 ) : IUserRepository {
-
-    private val userCache = ConcurrentHashMap<String, LiveData<User>>()
-    private val userProfilePictureCache = ConcurrentHashMap<String, LiveData<Resource<Uri>>>()
-
     override fun getUser(userId: String): LiveData<Resource<User>> {
-        val result: LiveData<Resource<User>>
-        if (!userCache.containsKey(userId)) {
-            result = Transformations.switchMap(userDao.findByUid(userId)) {
-                if (it.status == Status.LOADING) {
-                    return@switchMap MutableLiveData(Resource.loading(it.data))
-                }
-                if (it.status == Status.ERROR) {
-                    return@switchMap MutableLiveData(it)
-                }
-
-                val user = MutableLiveData(it)
-                if (!userProfilePictureCache.containsKey(userId)) {
-                    userProfilePictureCache[userId] =
-                        userProfilePictureDao.loadImage(userId, it.data!!.profilePictureName)
-                }
-                val profilePicture = userProfilePictureCache[userId]!!
-
-
-                val r = MediatorLiveData<Resource<User>>()
-                r.addSource(user) {
-                    r.value = combineUserAndProfilePictureData(user, profilePicture)
-                }
-
-                r.addSource(profilePicture) {
-                    r.value = combineUserAndProfilePictureData(user, profilePicture)
-                }
-
-                return@switchMap r
+        return Transformations.switchMap(userDao.findByUid(userId)) { user ->
+            // If it is loading or an error occurred we can not get the image.
+            if (user.status in listOf(Status.ERROR, Status.LOADING)) {
+                return@switchMap MutableLiveData(user)
             }
 
-            userCache[userId] = Transformations.map(result) {
-                return@map it.data
-            }
-        } else {
-            result = Transformations.map(userCache[userId]!!) {
-                return@map Resource.success(it)
+            Transformations.switchMap(
+                userProfilePictureDao.loadImage(
+                    userId, user.data!!.profilePictureName
+                )
+            ) { image ->
+                if (image.status == Status.SUCCESS) {
+                    user.data.profilePictureUri = image.data
+                }
+
+                MutableLiveData(user)
             }
         }
-        return result
     }
 
     override fun updateUser(
-        userId: String, user: User, hasImageChanged: Boolean
-    ): LiveData<Resource<User>> {
-        val result = MediatorLiveData<Resource<User>>()
-        var profilePictureUpdate = userProfilePictureCache[userId]
-        if (hasImageChanged && user.profilePictureUri != null) {
-            profilePictureUpdate = userProfilePictureDao.uploadImage(
-                userId, user.profilePictureUri!!
-            )
-            userProfilePictureCache[userId] = Transformations.map(profilePictureUpdate) {
-                // We do not want to store an error in the cache.
-                return@map Resource.success(it.data)
-            }
-        }
-
+        userId: String, user: User
+    ): LiveData<Resource<Unit>> {
         val userUpdate = userDao.updateUser(userId, user)
-        userCache[userId] = Transformations.map(userUpdate) {
-            return@map it.data
+
+        val result = if (user.imageChanged && user.profilePictureUri != null) {
+            val pictureUpdate = userProfilePictureDao.uploadImage(userId, user.profilePictureUri!!)
+            val result = MediatorLiveData<Resource<Unit>>()
+            result.addSource(userUpdate) {
+                result.value = combineResults(userUpdate, pictureUpdate)
+            }
+            result.addSource(pictureUpdate) {
+                result.value = combineResults(userUpdate, pictureUpdate)
+            }
+            result
+        } else {
+            userUpdate
         }
 
-        result.addSource(userUpdate) {
-            result.value = combineUserAndProfilePictureData(
-                userUpdate, profilePictureUpdate!!
-            )
-        }
-        result.addSource(profilePictureUpdate!!) {
-            result.value = combineUserAndProfilePictureData(
-                userUpdate, profilePictureUpdate
-            )
-        }
+        user.reset()
         return result
     }
 
-    private fun combineUserAndProfilePictureData(
-        userResult: LiveData<Resource<User>>, profilePictureResult: LiveData<Resource<Uri>>
-    ): Resource<User> {
-        val user = userResult.value
-        val profilePicture = profilePictureResult.value
+    // TODO: Make generic and move out of here
+    private fun combineResults(
+        firstResult: LiveData<Resource<Unit>>, secondResult: LiveData<Resource<Unit>>
+    ): Resource<Unit> {
+        val first = firstResult.value
+        val second = secondResult.value
 
-        if (user?.status == Status.ERROR) {
-            return Resource.error(user.message!!, user.data)
+        if (first?.status == Status.ERROR) {
+            return Resource.error(first.message!!, null)
         }
 
-        if (profilePicture?.status == Status.ERROR) {
-            return Resource.error(profilePicture.message!!, user?.data)
+        if (second?.status == Status.ERROR) {
+            return Resource.error(second.message!!, null)
         }
 
-        if (user == null || profilePicture == null) {
-            return Resource.loading(user?.data)
+        if (first == null || second == null || first.status == Status.LOADING || second.status == Status.LOADING) {
+            return Resource.loading(null)
         }
 
-        val userData = user.data
-            ?: throw IllegalStateException("Fetched user profile, but no data was returned")
-        val profilePictureData = profilePicture.data
-            ?: throw IllegalStateException("Fetched profile picture, but no data was returned")
-
-        val result = User().apply {
-            username = userData.username
-            profilePictureName = userData.profilePictureName
-            profilePictureUri = profilePictureData
-        }
-
-        Timber.v("Fetched user data: $result")
-        return Resource.success(result)
+        return Resource.success(null)
     }
-
-
 }
