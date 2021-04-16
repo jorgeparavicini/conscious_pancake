@@ -32,6 +32,7 @@ class UserRepository @Inject constructor(
                 if (image.status == Status.SUCCESS) {
                     user.data.profilePictureUri = image.data
                 }
+                user.data.startTracking()
 
                 MutableLiveData(user)
             }

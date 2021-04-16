@@ -25,7 +25,6 @@ class UserDao @Inject constructor(@ApplicationContext private val context: Conte
         docRef.get().addOnSuccessListener { document ->
             if (document != null) {
                 result.value = Resource.success(document.toObject(User::class.java))
-                result.value?.data?.startTracking()
             } else {
                 Timber.e("Could not fetch user document with id: $uid")
                 result.value = Resource.error("Could not fetch user document.", null)
@@ -41,12 +40,16 @@ class UserDao @Inject constructor(@ApplicationContext private val context: Conte
         val result = MutableLiveData<Resource<Unit>>()
         val docRef = getUserDoc(uid)
 
-        docRef.set(user).addOnSuccessListener {
-            Timber.i("Successfully updated user document to: $user")
+        if (user.isDirty.value == true) {
+            docRef.set(user).addOnSuccessListener {
+                Timber.i("Successfully updated user document to: $user")
+                result.value = Resource.success(null)
+            }.addOnFailureListener {
+                Timber.e("Failed to update user document. $it")
+                result.value = Resource.error(context.getString(R.string.failed_user_update), null)
+            }
+        } else {
             result.value = Resource.success(null)
-        } .addOnFailureListener {
-            Timber.e("Failed to update user document. $it")
-            result.value = Resource.error(context.getString(R.string.failed_user_update), null)
         }
 
         return result

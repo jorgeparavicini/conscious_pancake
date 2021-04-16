@@ -1,8 +1,11 @@
 package ch.ffhs.conscious_pancake.ui.profile
 
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
@@ -47,6 +50,14 @@ class ProfileFragment : Fragment() {
             profileChangeImage.setOnClickListener {
                 takePicture()
             }
+            viewModel.errorMessage.observe(viewLifecycleOwner) {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            }
+
+            editUsername.setOnKeyListener { v, k, _ ->
+                dropFocusOnEnter(v, k)
+            }
+
             updateProfileButton.setOnClickListener { viewModel.saveChanges() }
         }.root
     }
@@ -94,5 +105,17 @@ class ProfileFragment : Fragment() {
     private fun createTemporaryProfilePictureFile(): Path {
         val uid = UUID.randomUUID().toString()
         return Files.createTempFile(uid, ".jpg")
+    }
+
+    private fun dropFocusOnEnter(v: View, keyCode: Int): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            val imm =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(requireActivity().window.decorView.rootView.windowToken, 0)
+            v.isFocusable = false
+            v.isFocusableInTouchMode = true
+            return true
+        }
+        return false
     }
 }

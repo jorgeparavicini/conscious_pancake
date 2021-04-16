@@ -1,6 +1,9 @@
 package ch.ffhs.conscious_pancake.vo
 
 import androidx.databinding.BaseObservable
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.google.firebase.firestore.Exclude
 
 open class BaseModel : BaseObservable() {
 
@@ -14,18 +17,22 @@ open class BaseModel : BaseObservable() {
     /**
      * A record of the changes made to the object
      */
+    @get:Exclude
     val changes = HashMap<Int, Any?>()
+
+    private val _isDirty = MutableLiveData(false)
 
     /**
      * Have there been made changes to the object.
      */
-    val isDirty: Boolean
-        get() = changes.isNotEmpty()
+    val isDirty: LiveData<Boolean>
+        @Exclude get() = _isDirty
 
     fun <T> applyChanges(old: T?, new: T?, fieldId: Int) {
         if (old != new) {
             if (trackChanges) {
                 changes[fieldId] = new
+                updateIsDirty()
             }
             notifyPropertyChanged(fieldId)
         }
@@ -36,6 +43,11 @@ open class BaseModel : BaseObservable() {
      */
     fun reset() {
         changes.clear()
+        updateIsDirty()
+    }
+
+    private fun updateIsDirty() {
+        _isDirty.value = changes.isNotEmpty()
     }
 
     /**

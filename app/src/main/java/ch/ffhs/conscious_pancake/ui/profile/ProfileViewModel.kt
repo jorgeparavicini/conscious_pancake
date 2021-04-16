@@ -64,6 +64,7 @@ class ProfileViewModel @Inject constructor(
     fun saveChanges() {
         val update = userRepo.updateUser(userId, user.value!!.data!!)
         observeResultForErrors(update)
+        _isEditing.value = false
     }
 
     // Seems like a bug: adding !! says its safe to remove, but upon removing it, the null error comes.

@@ -8,7 +8,7 @@ import com.google.firebase.firestore.Exclude
 class User : BaseModel() {
 
     val imageChanged: Boolean
-        get() = changes.containsKey(BR.profilePictureUri)
+        @Exclude get() = changes.containsKey(BR.profilePictureUri)
 
     @get:Bindable
     var username: String = ""
@@ -17,6 +17,22 @@ class User : BaseModel() {
             field = value
             applyChanges(old, value, BR.username)
         }
+
+    @get:Bindable
+    var firstName: String = ""
+        set(value) {
+            val old = field
+            field = value
+            applyChanges(old, value, BR.firstName)
+        }
+
+    @get:Bindable
+    var lastName: String = ""
+    set(value) {
+        val old = field
+        field = value
+        applyChanges(old, value, BR.lastName)
+    }
 
     @get:Bindable
     var profilePictureName: String = ""

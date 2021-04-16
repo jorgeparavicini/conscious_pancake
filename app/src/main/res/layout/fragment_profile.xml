@@ -16,42 +16,44 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/profile_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
-            android:contentDescription="@string/profile_image_description"
-            android:src="@{profileViewModel.user.data.profilePictureUri}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/profile_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/profile_change_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="@string/change_profile_picture"
-            app:isVisible="@{!profileViewModel.isEditing}"
-            app:layout_constraintBottom_toBottomOf="@id/profile_image"
-            app:layout_constraintStart_toEndOf="@id/profile_image"
-            app:layout_constraintTop_toTopOf="@id/profile_image" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/profile_image_description"
+                android:scaleType="centerCrop"
+                android:src="@{profileViewModel.user.data.profilePictureUri}"
+                tools:srcCompat="@tools:sample/avatars" />
 
+            <Button
+                android:id="@+id/profile_change_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/change_profile_picture"
+                app:isVisible="@{profileViewModel.isEditing}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:id="@+id/row_1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginTop="32dp"
-            app:layout_constraintTop_toBottomOf="@id/profile_image">
+            app:layout_constraintTop_toBottomOf="@id/profile_image_view">
 
 
             <TextView
-                android:id="@+id/label_username"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="32dp"
                 android:layout_weight="0.5"
                 android:fontFamily="@font/roboto"
@@ -65,73 +67,102 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:text="@{profileViewModel.user.data.username}"
-                android:visibility="@{profileViewModel.isEditing() ? View.GONE : View.VISIBLE}" />
+                isVisible="@{!profileViewModel.isEditing()}" />
 
             <EditText
                 android:id="@+id/edit_username"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:autofillHints="username"
                 android:inputType="text"
-                android:visibility="gone" />
+                android:text="@={profileViewModel.user.data.username}"
+                isVisible="@{profileViewModel.isEditing()}" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/row_2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginTop="32dp"
-            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/row_1">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_weight="0.5"
-                android:text="@string/email_address" />
 
             <TextView
-                android:id="@+id/profile_email"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="32dp"
+                android:layout_weight="0.5"
+                android:fontFamily="@font/roboto"
+                android:labelFor="@id/edit_first_name"
+                android:text="@string/first_name"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/profile_first_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="@string/username" />
+                android:text="@{profileViewModel.user.data.firstName}"
+                isVisible="@{!profileViewModel.isEditing()}" />
+
+            <EditText
+                android:id="@+id/edit_first_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:autofillHints="name"
+                android:inputType="text"
+                android:text="@={profileViewModel.user.data.firstName}"
+                isVisible="@{profileViewModel.isEditing()}" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginTop="32dp"
-            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/row_2">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_weight="0.5"
-                android:text="@string/profile_uid" />
 
             <TextView
-                android:id="@+id/profile_id"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="32dp"
+                android:layout_weight="0.5"
+                android:fontFamily="@font/roboto"
+                android:labelFor="@id/edit_last_name"
+                android:text="@string/last_name"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/profile_last_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="@string/profile_uid" />
+                android:text="@{profileViewModel.user.data.lastName}"
+                isVisible="@{!profileViewModel.isEditing()}" />
+
+            <EditText
+                android:id="@+id/edit_last_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:autofillHints="name"
+                android:inputType="text"
+                android:text="@={profileViewModel.user.data.lastName}"
+                isVisible="@{profileViewModel.isEditing()}" />
         </LinearLayout>
 
         <Button
             android:id="@+id/update_profile_button"
+            isVisible="@{profileViewModel.user.data.isDirty}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="16dp"
             android:text="@string/update_profile"
-            app:layout_constraintBottom_toBottomOf="parent"
-            isVisible="@{profileViewModel.user.data.isDirty}"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
