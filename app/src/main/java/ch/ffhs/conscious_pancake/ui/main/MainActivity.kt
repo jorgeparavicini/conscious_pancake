@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import ch.ffhs.conscious_pancake.R
 import ch.ffhs.conscious_pancake.databinding.ActivityMainBinding
@@ -19,15 +20,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
         appBarConfiguration = AppBarConfiguration(setOf(R.id.titleFragment, R.id.homeFragment))
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.navigation_host) as NavHostFragment
         navController = navHostFragment.navController
 
+        NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration)
+
         binding.toolbar.setupWithNavController(
             navController, appBarConfiguration
         )
-        setSupportActionBar(binding.toolbar)
+
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp()
     }
 }
