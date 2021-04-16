@@ -27,4 +27,6 @@
     <string name="profile_picture_upload_failed">Failed to upload profile picture.</string>
     <string name="profile_picture_download_failed">An error occurred whilst downloading profile picture.</string>
     <string name="failed_user_update">Failed to update user document.</string>
+    <string name="title_welcome">Welcome</string>
+    <string name="login">Login</string>
 </resources>

@@ -17,4 +17,6 @@
     <style name="Theme.ConsciousPancake.ActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.ConsciousPancake.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
+
+    <style name="Theme.ConsciousPancake.Auth" parent="Theme.ConsciousPancake" />
 </resources>

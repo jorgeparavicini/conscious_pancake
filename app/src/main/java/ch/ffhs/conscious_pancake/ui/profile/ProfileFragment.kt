@@ -51,6 +51,10 @@ class ProfileFragment : Fragment() {
         }.root
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     /* Options Menu */
 
@@ -90,10 +94,5 @@ class ProfileFragment : Fragment() {
     private fun createTemporaryProfilePictureFile(): Path {
         val uid = UUID.randomUUID().toString()
         return Files.createTempFile(uid, ".jpg")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/loginDispatcher">
+    app:startDestination="@id/titleFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -15,19 +15,11 @@
             app:argType="string" />
     </fragment>
     <fragment
-        android:id="@+id/loginDispatcher"
-        android:name="ch.ffhs.conscious_pancake.ui.login_dispatcher.LoginDispatcherFragment"
-        android:label="LoginDispatcher" >
+        android:id="@+id/titleFragment"
+        android:name="ch.ffhs.conscious_pancake.ui.title.TitleFragment"
+        android:label="TitleFragment">
         <action
-            android:id="@+id/action_loginDispatcher_to_homeFragment"
+            android:id="@+id/action_titleFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
-        <action
-            android:id="@+id/action_loginDispatcher_to_loginActivity"
-            app:destination="@id/loginActivity" />
     </fragment>
-    <activity
-        android:id="@+id/loginActivity"
-        android:name="ch.ffhs.conscious_pancake.ui.auth.LoginActivity"
-        android:label="activity_login"
-        tools:layout="@layout/activity_login" />
 </navigation>

@@ -28,7 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="ch.ffhs.conscious_pancake.ui.auth.LoginActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
