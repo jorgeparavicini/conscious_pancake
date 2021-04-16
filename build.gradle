@@ -1,9 +1,9 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
-        kotlin_version = "1.4.31"
+        kotlin_version = "1.4.32"
         hilt_version = '2.33-beta'
-        navigation_version = "2.3.4"
+        navigation_version = "2.3.5"
     }
 
     repositories {
