@@ -29,4 +29,6 @@
     <string name="failed_user_update">Failed to update user document.</string>
     <string name="title_welcome">Welcome</string>
     <string name="login">Login</string>
+    <string name="host">Host Game</string>
+    <string name="join">Join Game</string>
 </resources>

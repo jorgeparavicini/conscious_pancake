@@ -12,4 +12,6 @@
     <color name="orange_600">#F44F03</color>
     <color name="teal_200">#03f4c8</color>
     <color name="blue_600">#032ff4</color>
+    <color name="orange_500">#ff5722</color>
+    <color name="grey_800">#424242</color>
 </resources>

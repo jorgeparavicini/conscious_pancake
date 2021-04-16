@@ -69,7 +69,7 @@ class ProfileFragment : Fragment() {
 
     /* Options Menu */
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    /*override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
         if (viewModel.isEditable) {
@@ -85,7 +85,7 @@ class ProfileFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
+    }*/
 
 
     /**

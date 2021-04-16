@@ -6,8 +6,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IdRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import ch.ffhs.conscious_pancake.R
 import ch.ffhs.conscious_pancake.databinding.FragmentHomeBinding
@@ -15,27 +17,25 @@ import ch.ffhs.conscious_pancake.ui.main.MainActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import timber.log.Timber
 
-class HomeFragment : Fragment(), BottomNavigationView.OnNavigationItemSelectedListener {
+class HomeFragment : Fragment(R.layout.fragment_home),
+    BottomNavigationView.OnNavigationItemSelectedListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var homePagerAdapter: HomePagerAdapter
 
+    // View Lifecycle
+
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        Timber.i(arguments?.getString("user_id"))
-        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         homePagerAdapter = HomePagerAdapter(arguments, requireActivity())
 
         homePagerAdapter.setItems(
             arrayListOf(
-                MainScreen.LOBBY,
-                MainScreen.HISTORY,
-                MainScreen.PROFILE
+                MainScreen.LOBBY, MainScreen.HISTORY, MainScreen.PROFILE
             )
         )
 
@@ -45,20 +45,26 @@ class HomeFragment : Fragment(), BottomNavigationView.OnNavigationItemSelectedLi
         setTitle(defaultScreen.titleStringId)
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener(this)
-
-        binding.pager.adapter = homePagerAdapter
-        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                val selectedScreen = homePagerAdapter.getItems()[position]
-                selectBottomNavigationViewMenuItem(selectedScreen.menuItemId)
-                setTitle(selectedScreen.titleStringId)
-            }
-        })
-
         return binding.apply {
-            lifecycleOwner = viewLifecycleOwner
+            pager.adapter = homePagerAdapter
+            pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    val selectedScreen = homePagerAdapter.getItems()[position]
+                    selectBottomNavigationViewMenuItem(selectedScreen.menuItemId)
+                    setTitle(selectedScreen.titleStringId)
+                }
+            })
+            fabHostGame.setOnClickListener { navigateToHostGame() }
+            fabJoinGame.setOnClickListener { navigateToJoinGame() }
         }.root
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    // Navigation
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         getMainScreenForMenuItem(item.itemId)?.let {
@@ -91,12 +97,19 @@ class HomeFragment : Fragment(), BottomNavigationView.OnNavigationItemSelectedLi
         return null
     }
 
+    // Helper methods
+
     private fun setTitle(id: Int) {
-        (activity as MainActivity).supportActionBar?.setTitle(id)
+        (activity as AppCompatActivity).supportActionBar?.setTitle(id)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun navigateToHostGame() {
+        requireView().findNavController()
+            .navigate(HomeFragmentDirections.actionHomeFragmentToHostGameFragment())
+    }
+
+    private fun navigateToJoinGame() {
+        requireView().findNavController()
+            .navigate(HomeFragmentDirections.actionHomeFragmentToJoinGameFragment())
     }
 }

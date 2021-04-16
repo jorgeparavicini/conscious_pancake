@@ -36,8 +36,7 @@ class TitleFragment : Fragment(R.layout.fragment_title) {
         val user = Firebase.auth.currentUser
         Timber.d("Dispatching user: ${user?.uid}")
         if (user != null) {
-            requireView().findNavController()
-                .navigate(TitleFragmentDirections.actionTitleFragmentToHomeFragment(user.uid))
+            navigateToHome()
         } else {
             authResultLauncher.launch(RC_SIGN_IN)
         }
@@ -49,10 +48,14 @@ class TitleFragment : Fragment(R.layout.fragment_title) {
                 Timber.i("Login cancelled")
             }
             else -> {
-                requireView().findNavController()
-                    .navigate(TitleFragmentDirections.actionTitleFragmentToHomeFragment(Firebase.auth.currentUser!!.uid))
+                navigateToHome()
             }
         }
+    }
+
+    private fun navigateToHome() {
+        val navController = requireView().findNavController()
+        navController.navigate(TitleFragmentDirections.actionTitleFragmentToHomeFragment(Firebase.auth.currentUser!!.uid))
     }
 
     companion object {

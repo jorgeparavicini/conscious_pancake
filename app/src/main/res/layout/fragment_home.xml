@@ -1,30 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-        
-    </data>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/pager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/windowBackground"
+        android:elevation="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_navigation_menu"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:itemTextColor="@color/bottom_nav_color"/>
 
+    <com.nambimobile.widgets.efab.ExpandableFabLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation_view"
-            android:layout_width="match_parent"
+        <com.nambimobile.widgets.efab.ExpandableFab
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="?android:attr/windowBackground"
-            android:elevation="16dp"
-            app:menu="@menu/bottom_navigation_menu" />
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            app:efab_color="?attr/colorSecondary"
+            app:efab_icon="@drawable/outline_play_arrow_24"
+            app:efab_iconAnimationRotationDeg="-90"
+            app:efab_closingAnticipateTension="0" />
 
-    </LinearLayout>
-</layout>
+        <com.nambimobile.widgets.efab.FabOption
+            android:id="@+id/fab_host_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_color="?attr/colorSecondary"
+            app:label_text="@string/host"
+            app:fab_icon="@drawable/outline_compare_arrows_24" />
+
+        <com.nambimobile.widgets.efab.FabOption
+            android:id="@+id/fab_join_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_color="?attr/colorSecondary"
+            app:label_text="@string/join"
+            app:fab_icon="@drawable/outline_swap_horiz_24" />
+
+    </com.nambimobile.widgets.efab.ExpandableFabLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
