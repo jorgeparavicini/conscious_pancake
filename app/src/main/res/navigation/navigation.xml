@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="ch.ffhs.conscious_pancake.ui.home.HomeFragment"
-        android:label="HomeFragment"
+        android:label="Home"
         tools:layout="@layout/fragment_home">
         <argument
             android:name="user_id"
@@ -23,7 +23,7 @@
     <fragment
         android:id="@+id/titleFragment"
         android:name="ch.ffhs.conscious_pancake.ui.title.TitleFragment"
-        android:label="TitleFragment">
+        android:label="@string/app_name">
         <action
             android:id="@+id/action_titleFragment_to_homeFragment"
             app:destination="@id/homeFragment"
@@ -33,10 +33,10 @@
     <fragment
         android:id="@+id/joinGameFragment"
         android:name="ch.ffhs.conscious_pancake.ui.join.JoinGameFragment"
-        android:label="JoinGameFragment" />
+        android:label="Join Game" />
     <fragment
         android:id="@+id/hostGameFragment"
         android:name="ch.ffhs.conscious_pancake.ui.host.HostGameFragment"
-        android:label="fragment_host_game"
+        android:label="Host Game"
         tools:layout="@layout/fragment_host_game" />
 </navigation>

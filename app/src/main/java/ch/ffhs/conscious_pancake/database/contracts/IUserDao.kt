@@ -3,12 +3,14 @@ package ch.ffhs.conscious_pancake.database.contracts
 import androidx.lifecycle.LiveData
 import ch.ffhs.conscious_pancake.vo.Resource
 import ch.ffhs.conscious_pancake.vo.User
+import com.google.firebase.inject.Deferred
+import kotlinx.coroutines.Job
 
 /**
  * User Firebase access Contract
  */
 interface IUserDao {
-    fun findByUid(uid: String): LiveData<Resource<User>>
+    suspend fun findByUid(uid: String): Resource<User>
 
-    fun updateUser(uid: String, user: User): LiveData<Resource<Unit>>
+    suspend fun updateUser(uid: String, user: User): Resource<Unit>
 }

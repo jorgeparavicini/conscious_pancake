@@ -1,16 +1,17 @@
 package ch.ffhs.conscious_pancake.ui.profile
 
-import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.lifecycle.*
-import ch.ffhs.conscious_pancake.vo.Resource
-import ch.ffhs.conscious_pancake.vo.User
 import ch.ffhs.conscious_pancake.repository.UserRepository
+import ch.ffhs.conscious_pancake.utils.RefreshableLiveData
 import ch.ffhs.conscious_pancake.utils.fileName
+import ch.ffhs.conscious_pancake.vo.Resource
 import ch.ffhs.conscious_pancake.vo.Status
+import ch.ffhs.conscious_pancake.vo.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,11 +46,17 @@ class ProfileViewModel @Inject constructor(
     val errorMessage: LiveData<String>
         get() = _errorMessage
 
+    private val _user = userRepo.getUser(userId)
+
     /**
      * The user to be displayed
      */
-    val user: LiveData<Resource<User>> = userRepo.getUser(userId)
+    val user: LiveData<Resource<User>>
+        get() = _user
 
+    init {
+        _user.refresh(viewModelScope)
+    }
 
     fun toggleEditing() {
         _isEditing.value = !_isEditing.value!!
@@ -62,19 +69,18 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun saveChanges() {
-        val update = userRepo.updateUser(userId, user.value!!.data!!)
-        observeResultForErrors(update)
-        _isEditing.value = false
+        viewModelScope.launch {
+            val update = userRepo.updateUser(userId, user.value!!.data!!)
+            if (update.status == Status.ERROR) {
+                // TODO ????
+            }
+            _isEditing.value = false
+        }
+
     }
 
-    // Seems like a bug: adding !! says its safe to remove, but upon removing it, the null error comes.
-    @SuppressLint("NullSafeMutableLiveData")
-    private fun <T> observeResultForErrors(resource: LiveData<Resource<T>>) {
-        _errorMessage.addSource(resource) {
-            if (it.status == Status.ERROR && it.message != null) {
-                _errorMessage.value = it.message
-            }
-        }
+    fun reloadUser() {
+        _user.refresh(viewModelScope)
     }
 
     companion object {

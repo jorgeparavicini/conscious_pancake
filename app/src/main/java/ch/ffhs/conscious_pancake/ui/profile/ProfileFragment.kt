@@ -58,6 +58,16 @@ class ProfileFragment : Fragment() {
                 dropFocusOnEnter(v, k)
             }
 
+            profileSwipeRefresh.isRefreshing = true
+
+            viewModel.user.observe(viewLifecycleOwner) {
+                profileSwipeRefresh.isRefreshing = false
+            }
+
+            profileSwipeRefresh.setOnRefreshListener {
+                profileSwipeRefresh.isRefreshing = true
+                viewModel.reloadUser()
+            }
             updateProfileButton.setOnClickListener { viewModel.saveChanges() }
         }.root
     }
@@ -69,7 +79,7 @@ class ProfileFragment : Fragment() {
 
     /* Options Menu */
 
-    /*override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
         if (viewModel.isEditable) {
@@ -85,7 +95,7 @@ class ProfileFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }*/
+    }
 
 
     /**

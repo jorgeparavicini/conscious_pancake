@@ -1,8 +1,6 @@
 package ch.ffhs.conscious_pancake.database
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import ch.ffhs.conscious_pancake.R
 import ch.ffhs.conscious_pancake.database.contracts.IUserDao
 import ch.ffhs.conscious_pancake.vo.Resource
@@ -11,49 +9,49 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.coroutines.resume
 
 /**
  * Firebase Access
  */
-class UserDao @Inject constructor(@ApplicationContext private val context: Context): IUserDao {
-    override fun findByUid(uid: String): LiveData<Resource<User>> {
-        val result = MutableLiveData<Resource<User>>()
-        val docRef = getUserDoc(uid)
+class UserDao @Inject constructor(@ApplicationContext private val context: Context) : IUserDao {
+    override suspend fun findByUid(uid: String): Resource<User> =
+        suspendCancellableCoroutine { ctx ->
+            val docRef = getUserDoc(uid)
 
-        docRef.get().addOnSuccessListener { document ->
-            if (document != null) {
-                result.value = Resource.success(document.toObject(User::class.java))
-            } else {
-                Timber.e("Could not fetch user document with id: $uid")
-                result.value = Resource.error("Could not fetch user document.", null)
-            }
-        }.addOnFailureListener {
-            Timber.e("Failed fetching user document. $it")
-            result.value = Resource.error("Could not fetch user document.", null)
-        }
-        return result
-    }
-
-    override fun updateUser(uid: String, user: User): LiveData<Resource<Unit>> {
-        val result = MutableLiveData<Resource<Unit>>()
-        val docRef = getUserDoc(uid)
-
-        if (user.isDirty.value == true) {
-            docRef.set(user).addOnSuccessListener {
-                Timber.i("Successfully updated user document to: $user")
-                result.value = Resource.success(null)
+            docRef.get().addOnSuccessListener { document ->
+                if (document != null) {
+                    Timber.v("Fetched user data for user: $uid")
+                    ctx.resume(Resource.success(document.toObject(User::class.java)!!))
+                } else {
+                    Timber.e("Could not fetch user document with id: $uid")
+                    ctx.resume(Resource.error("Could not fetch user document.", null))
+                }
             }.addOnFailureListener {
-                Timber.e("Failed to update user document. $it")
-                result.value = Resource.error(context.getString(R.string.failed_user_update), null)
+                Timber.e("Failed fetching user document. $it")
+                ctx.resume(Resource.error("Could not fetch user document.", null))
             }
-        } else {
-            result.value = Resource.success(null)
         }
 
-        return result
-    }
+    override suspend fun updateUser(uid: String, user: User): Resource<Unit> =
+        suspendCancellableCoroutine { ctx ->
+            val docRef = getUserDoc(uid)
+
+            if (user.isDirty.value == true) {
+                docRef.set(user).addOnSuccessListener {
+                    Timber.i("Successfully updated user document to: $user")
+                    ctx.resume(Resource.success(null))
+                }.addOnFailureListener {
+                    Timber.e("Failed to update user document. $it")
+                    ctx.resume(Resource.error(context.getString(R.string.failed_user_update), null))
+                }
+            } else {
+                ctx.resume(Resource.success(null))
+            }
+        }
 
     private fun getUserDoc(userId: String): DocumentReference {
         return Firebase.firestore.collection("users").document(userId)
