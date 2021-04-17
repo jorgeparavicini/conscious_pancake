@@ -3,7 +3,6 @@ package ch.ffhs.conscious_pancake.utils
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 // This approach assumes working with Callbacks.
