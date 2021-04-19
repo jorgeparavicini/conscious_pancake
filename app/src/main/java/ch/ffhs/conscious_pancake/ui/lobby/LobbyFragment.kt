@@ -1,40 +1,57 @@
 package ch.ffhs.conscious_pancake.ui.lobby
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.ffhs.conscious_pancake.R
+import ch.ffhs.conscious_pancake.databinding.FragmentLobbyBinding
+import ch.ffhs.conscious_pancake.vo.Status
+import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
-class LobbyFragment : Fragment(R.layout.activity_lobby) {
-    private val data: Array<LobbyItem> =
-        arrayOf(
-            LobbyItem("Test 1"),
-            LobbyItem("Test 2"),
-            LobbyItem("Test 3"),
-            LobbyItem("Test 4"),
-            LobbyItem("Test 5"),
-            LobbyItem("Test 5"),
-            LobbyItem("Test 5"),
-            LobbyItem("Test 5"),
-            LobbyItem("Test 5"),
-            LobbyItem("Test 5")
+@AndroidEntryPoint
+class LobbyFragment : Fragment() {
 
+    private var _binding: FragmentLobbyBinding? = null
+    private val binding get() = _binding!!
 
-        )
+    private val viewModel: LobbyViewModel by viewModels()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentLobbyBinding.inflate(inflater, container, false)
 
-        val list = view.findViewById<RecyclerView>(R.id.lobby_list)
-        list.apply {
-            setHasFixedSize(true)
-            val lm = LinearLayoutManager(activity)
-            layoutManager = lm
-            adapter = LobbyAdapter(data)
-            addItemDecoration(DividerItemDecoration(list.context, lm.orientation))
+        val adapter = LobbyAdapter()
+
+        viewModel.games.observe(viewLifecycleOwner) {
+            it.let {
+                if (it.status == Status.ERROR) {
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                } else {
+                    adapter.data = it.data!!
+                }
+            }
         }
+
+        return binding.apply {
+            val lm = LinearLayoutManager(activity)
+            lobbyList.layoutManager = lm
+            lobbyList.adapter = adapter
+            lobbyList.addItemDecoration(DividerItemDecoration(lobbyList.context, lm.orientation))
+        }.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

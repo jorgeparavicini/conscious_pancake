@@ -55,7 +55,7 @@ class ProfileViewModel @Inject constructor(
         get() = _user
 
     init {
-        _user.refresh(viewModelScope)
+        reloadUser()
     }
 
     fun toggleEditing() {
@@ -80,7 +80,9 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun reloadUser() {
-        _user.refresh(viewModelScope)
+        viewModelScope.launch {
+            _user.refresh()
+        }
     }
 
     companion object {

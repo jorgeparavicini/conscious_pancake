@@ -1,29 +1,51 @@
 package ch.ffhs.conscious_pancake.ui.lobby
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ch.ffhs.conscious_pancake.R
+import ch.ffhs.conscious_pancake.databinding.LobbyRowItemBinding
+import ch.ffhs.conscious_pancake.vo.Game
 
-class LobbyAdapter(private val dataSet: Array<LobbyItem>) :
-    RecyclerView.Adapter<LobbyAdapter.ViewHolder>() {
+class LobbyAdapter : RecyclerView.Adapter<LobbyAdapter.LobbyViewHolder>() {
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView = view.findViewById(R.id.player_1_name)
+    var data = listOf<Game>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+            // TODO: Could be improved - don't update everything
+        }
 
+    override fun getItemCount() = data.size
+
+    override fun onBindViewHolder(holder: LobbyViewHolder, position: Int) {
+        val item = data[position]
+        holder.bind(item)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.lobby_row_item, parent, false)
-        return ViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LobbyViewHolder {
+        return LobbyViewHolder.from(parent)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = dataSet[position].player1Name
-    }
 
-    override fun getItemCount() = dataSet.size
+    class LobbyViewHolder(private val binding: LobbyRowItemBinding) : RecyclerView.ViewHolder(
+        binding.root
+    ) {
+
+        fun bind(item: Game) {
+            binding.apply {
+                player1Name.text = item.player1Id
+                player2Name.text = item.player2Id
+            }
+        }
+
+        companion object {
+
+            fun from(parent: ViewGroup): LobbyViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = LobbyRowItemBinding.inflate(layoutInflater, parent, false)
+                return LobbyViewHolder(binding)
+            }
+        }
+    }
 }

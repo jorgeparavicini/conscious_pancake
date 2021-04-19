@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.ffhs.conscious_pancake.R
 
-class HistoryFragment : Fragment(R.layout.activity_history) {
+class HistoryFragment : Fragment(R.layout.fragment_history) {
     private val data: Array<HistoryItem> = arrayOf(
         HistoryItem("Enemy 1", true),
         HistoryItem("Enemy 2", true),
