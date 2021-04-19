@@ -9,12 +9,7 @@ import ch.ffhs.conscious_pancake.vo.Game
 
 class LobbyAdapter : RecyclerView.Adapter<LobbyAdapter.LobbyViewHolder>() {
 
-    var data = listOf<Game>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-            // TODO: Could be improved - don't update everything
-        }
+    private var data = listOf<Game>()
 
     override fun getItemCount() = data.size
 
@@ -25,6 +20,15 @@ class LobbyAdapter : RecyclerView.Adapter<LobbyAdapter.LobbyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LobbyViewHolder {
         return LobbyViewHolder.from(parent)
+    }
+
+    fun setData(value: List<Game>, updateRange: IntRange?) {
+        data = value
+        if (updateRange == null) {
+            notifyDataSetChanged()
+        } else {
+            notifyItemRangeChanged(updateRange.first, updateRange.last)
+        }
     }
 
 

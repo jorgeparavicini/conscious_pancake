@@ -24,6 +24,9 @@ class LobbyViewModel @Inject constructor(
     val games: LiveData<Resource<List<Game>>>
         get() = _games
 
+    val updatedRange: IntRange
+        get() = _games.updatedRange
+
     init {
         reloadGames()
     }

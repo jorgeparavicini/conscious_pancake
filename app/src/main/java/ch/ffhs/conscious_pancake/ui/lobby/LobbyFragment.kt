@@ -37,7 +37,8 @@ class LobbyFragment : Fragment() {
                 if (it.status == Status.ERROR) {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
                 } else {
-                    adapter.data = it.data!!
+                    Timber.i("Updated range: ${viewModel.updatedRange.first} - ${viewModel.updatedRange.last}")
+                    adapter.setData(it.data!!, viewModel.updatedRange)
                 }
             }
         }
