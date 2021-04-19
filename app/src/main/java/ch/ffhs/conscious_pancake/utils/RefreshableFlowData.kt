@@ -17,7 +17,7 @@ class RefreshableFlowData<T>(
     suspend fun refresh() {
         val newValue = refreshFlowAction(0, limit)
         currentIndex = limit
-        updateRange(value?.data, newValue.data)
+        updateRange(null, newValue.data)
         postValue(newValue)
     }
 
