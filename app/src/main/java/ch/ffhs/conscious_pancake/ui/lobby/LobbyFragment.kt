@@ -32,22 +32,29 @@ class LobbyFragment : Fragment() {
 
         val adapter = LobbyAdapter()
 
-        viewModel.games.observe(viewLifecycleOwner) {
-            it.let {
-                if (it.status == Status.ERROR) {
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
-                } else {
-                    Timber.i("Updated range: ${viewModel.updatedRange.first} - ${viewModel.updatedRange.last}")
-                    adapter.setData(it.data!!, viewModel.updatedRange)
-                }
-            }
-        }
-
         return binding.apply {
             val lm = LinearLayoutManager(activity)
             lobbyList.layoutManager = lm
             lobbyList.adapter = adapter
             lobbyList.addItemDecoration(DividerItemDecoration(lobbyList.context, lm.orientation))
+
+            lobbySwipeRefresh.isRefreshing = true
+            viewModel.games.observe(viewLifecycleOwner) {
+                it.let {
+                    if (it.status == Status.ERROR) {
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                    } else {
+                        Timber.i("Updated range: ${viewModel.updatedRange.first} - ${viewModel.updatedRange.last}")
+                        adapter.setData(it.data!!, viewModel.updatedRange)
+                    }
+                }
+                lobbySwipeRefresh.isRefreshing = false
+            }
+
+            lobbySwipeRefresh.setOnRefreshListener {
+                lobbySwipeRefresh.isRefreshing = true
+                viewModel.reloadGames()
+            }
         }.root
     }
 
