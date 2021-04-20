@@ -55,7 +55,9 @@ class TitleFragment : Fragment(R.layout.fragment_title) {
 
     private fun navigateToHome() {
         val navController = requireView().findNavController()
-        navController.navigate(TitleFragmentDirections.actionTitleFragmentToHomeFragment(Firebase.auth.currentUser!!.uid))
+        val uid = Firebase.auth.currentUser!!.uid
+        Timber.i("Going to home fragment with user $uid")
+        navController.navigate(TitleFragmentDirections.actionTitleFragmentToHomeFragment(uid))
     }
 
     companion object {

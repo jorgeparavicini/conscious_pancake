@@ -15,6 +15,7 @@ import ch.ffhs.conscious_pancake.BuildConfig
 import ch.ffhs.conscious_pancake.R
 import ch.ffhs.conscious_pancake.databinding.FragmentProfileBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
