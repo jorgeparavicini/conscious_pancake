@@ -7,6 +7,7 @@ import kotlinx.coroutines.withContext
 
 typealias RefreshFlowAction<T> = (suspend (start: Int, count: Long) -> T)
 
+// TODO: Works but could be written a lot better. Needs refactoring
 class RefreshableFlowData<T>(
     private val limit: Long = 10,
     private val refreshFlowAction: RefreshFlowAction<Resource<List<T>>>

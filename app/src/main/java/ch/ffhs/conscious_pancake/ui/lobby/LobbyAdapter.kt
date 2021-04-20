@@ -23,11 +23,19 @@ class LobbyAdapter : RecyclerView.Adapter<LobbyAdapter.LobbyViewHolder>() {
     }
 
     fun setData(value: List<Game>, updateRange: IntRange?) {
+        // TODO: This needs some serious rework
+        val old = data
         data = value
-        if (updateRange == null) {
-            notifyDataSetChanged()
-        } else {
-            notifyItemRangeChanged(updateRange.first, updateRange.last)
+        when {
+            updateRange == null -> {
+                notifyDataSetChanged()
+            }
+            old.size >= data.size -> {
+                notifyItemRangeRemoved(0, old.size)
+            }
+            else -> {
+                notifyItemRangeChanged(updateRange.first, updateRange.last)
+            }
         }
     }
 

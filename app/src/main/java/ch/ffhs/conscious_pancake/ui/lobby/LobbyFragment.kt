@@ -33,6 +33,9 @@ class LobbyFragment : Fragment() {
         val adapter = LobbyAdapter()
 
         return binding.apply {
+            lobbyViewModel = viewModel
+            lifecycleOwner = viewLifecycleOwner
+
             val lm = LinearLayoutManager(activity)
             lobbyList.layoutManager = lm
             lobbyList.adapter = adapter
@@ -55,6 +58,8 @@ class LobbyFragment : Fragment() {
                 lobbySwipeRefresh.isRefreshing = true
                 viewModel.reloadGames()
             }
+
+            loadMore.setOnClickListener { viewModel.loadMoreGames() }
         }.root
     }
 
