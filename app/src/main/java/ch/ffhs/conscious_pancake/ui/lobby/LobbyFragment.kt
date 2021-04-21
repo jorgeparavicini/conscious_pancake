@@ -42,7 +42,10 @@ class LobbyFragment : Fragment() {
             lobbyList.adapter = adapter
             lobbyList.addItemDecoration(DividerItemDecoration(lobbyList.context, lm.orientation))
 
-            lobbySwipeRefresh.isRefreshing = true
+            viewModel.isLoading.observe(viewLifecycleOwner) {
+                lobbySwipeRefresh.isRefreshing = it
+            }
+
             viewModel.games.observe(viewLifecycleOwner) {
                 it.let {
                     if (it.status == Status.ERROR) {
@@ -52,11 +55,9 @@ class LobbyFragment : Fragment() {
                         adapter.setData(it.data!!, viewModel.updatedRange)
                     }
                 }
-                lobbySwipeRefresh.isRefreshing = false
             }
 
             lobbySwipeRefresh.setOnRefreshListener {
-                lobbySwipeRefresh.isRefreshing = true
                 viewModel.reloadGames()
             }
 

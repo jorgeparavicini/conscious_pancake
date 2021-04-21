@@ -25,6 +25,20 @@ class LobbyViewModel @Inject constructor(
     val updatedRange: IntRange
         get() = _games.updatedRange
 
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
+    val hasGames: LiveData<Boolean>
+        get() = Transformations.map(games) {
+            it.data != null && it.data.isNotEmpty()
+        }
+
+    val displayHint: LiveData<Boolean>
+        get() = Transformations.map(games) {
+            it.data != null && it.data.isEmpty()
+        }
+
     private val _canLoadMore = MutableLiveData(false)
     val canLoadMore: LiveData<Boolean>
         get() = _canLoadMore
@@ -34,6 +48,7 @@ class LobbyViewModel @Inject constructor(
     }
 
     fun reloadGames() {
+        _isLoading.value = true
         viewModelScope.launch {
             _games.refresh()
             updateCanLoadMore()
@@ -41,6 +56,7 @@ class LobbyViewModel @Inject constructor(
     }
 
     fun loadMoreGames() {
+        _isLoading.value = true
         viewModelScope.launch {
             _games.next()
             updateCanLoadMore()
@@ -48,6 +64,7 @@ class LobbyViewModel @Inject constructor(
     }
 
     private fun updateCanLoadMore() {
+        _isLoading.value = false
         _canLoadMore.value = (updatedRange.last - updatedRange.first) >= limit
     }
 

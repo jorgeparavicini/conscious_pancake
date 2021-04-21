@@ -22,8 +22,6 @@
     <string name="unexpected_error">An unexpected error occurred</string>
     <string name="update_profile">Update Profile</string>
     <string name="edit">Edit</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="profile_picture_upload_failed">Failed to upload profile picture.</string>
     <string name="profile_picture_download_failed">An error occurred whilst downloading profile picture.</string>
     <string name="failed_user_update">Failed to update user document.</string>
@@ -33,4 +31,5 @@
     <string name="join">Join Game</string>
     <string name="load_more">Load more</string>
     <string name="logout">Logout</string>
+    <string name="no_games_lobby">No current games. Start a new game by clicking on the play button.</string>
 </resources>
