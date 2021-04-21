@@ -51,18 +51,18 @@
             <LinearLayout
                 android:id="@+id/row_1"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="32dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@id/profile_image_view">
 
 
                 <TextView
+                    isVisible="@{!profileViewModel.isEditing()}"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
                     android:layout_weight="0.5"
                     android:fontFamily="@font/roboto"
-                    android:labelFor="@id/edit_username"
                     android:text="@string/username"
                     android:textSize="18sp" />
 
@@ -74,32 +74,41 @@
                     android:layout_weight="0.5"
                     android:text="@{profileViewModel.user.data.username}" />
 
-                <EditText
-                    android:id="@+id/edit_username"
+                <com.google.android.material.textfield.TextInputLayout
                     isVisible="@{profileViewModel.isEditing()}"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    android:autofillHints="username"
-                    android:inputType="text"
-                    android:text="@={profileViewModel.user.data.username}" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/edit_username"
+                        isVisible="@{profileViewModel.isEditing()}"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:autofillHints="username"
+                        android:hint="@string/username"
+                        android:inputType="text"
+                        android:text="@={profileViewModel.user.data.username}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/row_2"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="32dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@id/row_1">
 
 
                 <TextView
+                    isVisible="@{!profileViewModel.isEditing()}"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
                     android:layout_weight="0.5"
                     android:fontFamily="@font/roboto"
-                    android:labelFor="@id/edit_first_name"
                     android:text="@string/first_name"
                     android:textSize="18sp" />
 
@@ -111,31 +120,40 @@
                     android:layout_weight="0.5"
                     android:text="@{profileViewModel.user.data.firstName}" />
 
-                <EditText
-                    android:id="@+id/edit_first_name"
+                <com.google.android.material.textfield.TextInputLayout
                     isVisible="@{profileViewModel.isEditing()}"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    android:autofillHints="name"
-                    android:inputType="text"
-                    android:text="@={profileViewModel.user.data.firstName}" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/edit_first_name"
+                        isVisible="@{profileViewModel.isEditing()}"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:autofillHints="name"
+                        android:hint="@string/first_name"
+                        android:inputType="text"
+                        android:text="@={profileViewModel.user.data.firstName}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="32dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@id/row_2">
 
 
                 <TextView
+                    isVisible="@{!profileViewModel.isEditing()}"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
                     android:layout_weight="0.5"
                     android:fontFamily="@font/roboto"
-                    android:labelFor="@id/edit_last_name"
                     android:text="@string/last_name"
                     android:textSize="18sp" />
 
@@ -147,15 +165,24 @@
                     android:layout_weight="0.5"
                     android:text="@{profileViewModel.user.data.lastName}" />
 
-                <EditText
-                    android:id="@+id/edit_last_name"
+                <com.google.android.material.textfield.TextInputLayout
                     isVisible="@{profileViewModel.isEditing()}"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    android:autofillHints="name"
-                    android:inputType="text"
-                    android:text="@={profileViewModel.user.data.lastName}" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/edit_last_name"
+                        isVisible="@{profileViewModel.isEditing()}"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:autofillHints="name"
+                        android:hint="@string/last_name"
+                        android:inputType="text"
+                        android:text="@={profileViewModel.user.data.lastName}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <Button
