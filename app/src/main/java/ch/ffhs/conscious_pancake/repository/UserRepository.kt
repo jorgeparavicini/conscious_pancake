@@ -25,14 +25,15 @@ class UserRepository @Inject constructor(
         if (!userCache.containsKey(userId)) {
             val refreshable = RefreshableLiveData {
                 val userResult = userDao.findByUid(userId)
-                if (userResult.status == Status.SUCCESS) {
+                if (userResult.status == Status.SUCCESS && userResult.data?.imageUUID != null) {
                     val profilePictureResult = userProfilePictureDao.loadImage(
-                        userId, userResult.data!!.profilePictureName
+                        userId, userResult.data.imageUUID!!
                     )
                     if (profilePictureResult.status == Status.SUCCESS) {
                         userResult.data.profilePictureUri = profilePictureResult.data
                     }
                 }
+                userResult.data?.startTracking()
                 userResult
             }
             userCache[userId] = refreshable
@@ -51,6 +52,12 @@ class UserRepository @Inject constructor(
         ) {
             userProfilePictureDao.uploadImage(userId, user.profilePictureUri!!)
         } else null
+
+        // Consume dirty flag to hide update button
+        // Must be done on UI Thread as it modifies a live data object
+        withContext(Dispatchers.Main) {
+            user.reset()
+        }
 
         if (userUpdate.status == Status.ERROR) {
             return@withContext Resource.error(userUpdate.message!!)

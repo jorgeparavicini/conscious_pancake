@@ -31,8 +31,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/profile_image_description"
-                    android:scaleType="centerCrop"
-                    android:src="@{profileViewModel.user.data.profilePictureUri}"
+                    android:scaleType="fitCenter"
+                    android:src="@{profileViewModel.user.data.profilePictureUri, default=@drawable/ic_face_black_24dp}"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <Button

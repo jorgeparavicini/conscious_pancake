@@ -4,6 +4,7 @@ import androidx.databinding.BaseObservable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.Exclude
+import timber.log.Timber
 
 open class BaseModel : BaseObservable() {
 
@@ -44,6 +45,7 @@ open class BaseModel : BaseObservable() {
     fun reset() {
         changes.clear()
         updateIsDirty()
+        Timber.v("Reset changes for $this")
     }
 
     private fun updateIsDirty() {
@@ -54,6 +56,7 @@ open class BaseModel : BaseObservable() {
      * Start tracking changes
      */
     fun startTracking() {
+        Timber.v("Started tracking changes for $this")
         trackChanges = true
     }
 
@@ -61,6 +64,7 @@ open class BaseModel : BaseObservable() {
      * Stop tracking changes
      */
     fun stopTracking() {
+        Timber.v("Started tracking changes for $this")
         trackChanges = false
     }
 }

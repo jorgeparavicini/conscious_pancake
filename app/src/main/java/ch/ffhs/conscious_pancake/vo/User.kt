@@ -35,11 +35,11 @@ class User : BaseModel() {
     }
 
     @get:Bindable
-    var profilePictureName: String = ""
+    var imageUUID: String? = null
         set(value) {
             val old = field
             field = value
-            applyChanges(old, value, BR.profilePictureName)
+            applyChanges(old, value, BR.imageUUID)
         }
 
     @get:Bindable

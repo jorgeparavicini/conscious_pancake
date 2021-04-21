@@ -1,9 +1,9 @@
 package ch.ffhs.conscious_pancake.ui.profile
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.lifecycle.*
 import ch.ffhs.conscious_pancake.repository.UserRepository
-import ch.ffhs.conscious_pancake.utils.RefreshableLiveData
 import ch.ffhs.conscious_pancake.utils.fileName
 import ch.ffhs.conscious_pancake.vo.Resource
 import ch.ffhs.conscious_pancake.vo.Status
@@ -64,15 +64,15 @@ class ProfileViewModel @Inject constructor(
 
     fun setProfilePicture(imageUri: Uri) {
         val u = user.value!!.data!!
-        u.profilePictureName = imageUri.fileName
+        u.imageUUID = imageUri.fileName
         u.profilePictureUri = imageUri
     }
 
     fun saveChanges() {
         viewModelScope.launch {
             val update = userRepo.updateUser(userId, user.value!!.data!!)
-            if (update.status == Status.ERROR) {
-                // TODO ????
+            if (update.status == Status.ERROR && update.message != null) {
+                _errorMessage.value = update.message!!
             }
             _isEditing.value = false
         }
