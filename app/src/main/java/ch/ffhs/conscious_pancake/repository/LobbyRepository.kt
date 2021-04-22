@@ -9,14 +9,14 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class LobbyRepository @Inject constructor(private val gameDao: LobbyDao) : ILobbyRepository {
+class LobbyRepository @Inject constructor(private val lobbyDao: LobbyDao) : ILobbyRepository {
 
     private val lobbyCache = ConcurrentHashMap<String, RefreshableFlowData<Game>>()
 
     override fun getLobbies(uid: String, limit: Long): RefreshableFlowData<Game> {
         if (!lobbyCache.containsKey(uid)) {
             val refreshable = RefreshableFlowData(limit) { count, size ->
-                gameDao.getLobbiesForUser(uid, count, size)
+                lobbyDao.getLobbiesForUser(uid, count, size)
             }
 
             lobbyCache[uid] = refreshable
