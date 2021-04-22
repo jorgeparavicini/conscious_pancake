@@ -1,9 +1,8 @@
 package ch.ffhs.conscious_pancake.database
 
-import ch.ffhs.conscious_pancake.database.contracts.IGameDao
+import ch.ffhs.conscious_pancake.database.contracts.ILobbyDao
 import ch.ffhs.conscious_pancake.vo.Game
 import ch.ffhs.conscious_pancake.vo.Resource
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
@@ -14,11 +13,11 @@ import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
-class GameDao @Inject constructor() : IGameDao {
+class LobbyDao @Inject constructor() : ILobbyDao {
 
     private val snapshots = ConcurrentHashMap<String, List<DocumentSnapshot>>()
 
-    override suspend fun getGamesForUser(
+    override suspend fun getLobbiesForUser(
         uid: String, start: Int, count: Long
     ): Resource<List<Game>> = suspendCancellableCoroutine { ctx ->
         val collection = Firebase.firestore.collection("games")
@@ -35,6 +34,7 @@ class GameDao @Inject constructor() : IGameDao {
         // It can be null as that would just take the first one, which is the expected behaviour
         val request =
             collection.whereArrayContains("players", uid)
+                    .whereEqualTo("winner", null)
                     .orderBy("last_action")
                     .startAfter(snapshots[uid]?.lastOrNull()?.get("last_action"))
                     .limit(count)
