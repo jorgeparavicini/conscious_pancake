@@ -10,15 +10,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LobbyViewModel @Inject constructor(
-    gameRepo: LobbyRepository, private val savedStateHandle: SavedStateHandle
+    lobbyRepo: LobbyRepository, private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val limit: Long = 1
+    private val limit: Long = 10
 
     private val userId: String
         get() = savedStateHandle.get<String>(USER_ID_ARG_NAME)!!
 
-    private val _games = gameRepo.getLobbies(userId, limit)
+    private val _games = lobbyRepo.getLobbies(userId, limit)
     val games: LiveData<Resource<List<Game>>>
         get() = _games
 
