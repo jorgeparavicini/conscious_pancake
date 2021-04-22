@@ -3,6 +3,7 @@ package ch.ffhs.conscious_pancake.vo
 import androidx.databinding.Bindable
 import ch.ffhs.conscious_pancake.BR
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.QueryDocumentSnapshot
 
 class Game : BaseModel() {
 
@@ -53,4 +54,19 @@ class Game : BaseModel() {
             field = value
             applyChanges(old, value, BR.player1Id)
         }
+
+    companion object {
+        @Suppress("UNCHECKED_CAST")
+        fun fromFirebase(snapshot: QueryDocumentSnapshot): Game {
+            val obj = Game()
+            obj.id = snapshot.id
+            obj.lastAction = snapshot.getTimestamp("last_action")!!
+            obj.turn = snapshot.getLong("turn")!!.toInt()
+            obj.winner = snapshot.getString("winner")
+            val players = snapshot.get("players") as List<String>
+            obj.player1Id = players[0]
+            obj.player2Id = players[1]
+            return obj
+        }
+    }
 }

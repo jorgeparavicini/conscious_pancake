@@ -41,25 +41,12 @@ class LobbyDao @Inject constructor() : ILobbyDao {
 
         request.get().addOnSuccessListener { snapshot ->
             snapshots[uid] = snapshots[uid]!!.plus(snapshot.documents)
-            val result = snapshot.map { snapshotToGame(it) }
-            Timber.v("Fetched ${result.size} games for user: $uid from $start to ${start + result.size}")
+            val result = snapshot.map { Game.fromFirebase(it) }
+            Timber.v("Fetched ${result.size} lobby for user: $uid from $start to ${start + result.size}")
             ctx.resume(Resource.success(result))
         }.addOnFailureListener {
-            Timber.e("Failed fetching games for user: $uid. Exception: $it")
-            ctx.resume(Resource.error("Could not fetch games."))
+            Timber.e("Failed fetching lobby for user: $uid. Exception: $it")
+            ctx.resume(Resource.error("Could not fetch lobby."))
         }
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun snapshotToGame(snapshot: QueryDocumentSnapshot): Game {
-        val obj = Game()
-        obj.id = snapshot.id
-        obj.lastAction = snapshot.getTimestamp("last_action")!!
-        obj.turn = snapshot.getLong("turn")!!.toInt()
-        obj.winner = snapshot.getString("winner")
-        val players = snapshot.get("players") as List<String>
-        obj.player1Id = players[0]
-        obj.player2Id = players[1]
-        return obj
     }
 }
