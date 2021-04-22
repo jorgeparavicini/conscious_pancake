@@ -36,7 +36,7 @@ class LobbyViewModel @Inject constructor(
 
     val displayHint: LiveData<Boolean>
         get() = Transformations.map(games) {
-            it.data != null && it.data.isEmpty()
+            !(it.data != null && it.data.isNotEmpty()) && _isLoading.value == false
         }
 
     private val _canLoadMore = MutableLiveData(false)
