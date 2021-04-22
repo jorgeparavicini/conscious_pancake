@@ -46,8 +46,8 @@ class LobbyAdapter : RecyclerView.Adapter<LobbyAdapter.LobbyViewHolder>() {
 
         fun bind(item: Game) {
             binding.apply {
-                player1Name.text = item.player1Id
-                player2Name.text = item.player2Id
+                player1Name.text = item.player1?.username
+                player2Name.text = item.player2?.username
             }
         }
 

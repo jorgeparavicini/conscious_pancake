@@ -7,40 +7,93 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import ch.ffhs.conscious_pancake.R
+import ch.ffhs.conscious_pancake.databinding.HistoryRowItemBinding
+import ch.ffhs.conscious_pancake.vo.Game
 
-class HistoryAdapter(private val dataSet: Array<HistoryItem>) :
-    RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val enemyUserNameTextView: TextView = view.findViewById(R.id.enemy_user_name)
-        val wonLostTextView: TextView = view.findViewById(R.id.won_lost)
-    }
+class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.history_row_item, parent, false)
-        return ViewHolder(view)
-    }
+    private var data = listOf<Game>()
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.enemyUserNameTextView.text = dataSet[position].enemyUserName
+    override fun getItemCount() = data.size
+
+    override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
+        val item = data[position]
+        holder.bind(item)
+        /*holder.enemyUserNameTextView.text = dataSet[position].enemyUserName
         if (dataSet[position].won) {
             holder.wonLostTextView.setText(R.string.won)
             holder.wonLostTextView.setTextColor(
                 ContextCompat.getColor(
-                    holder.enemyUserNameTextView.context,
-                    R.color.success_green
+                    holder.enemyUserNameTextView.context, R.color.success_green
                 )
             )
         } else {
             holder.wonLostTextView.setText(R.string.lost)
             holder.wonLostTextView.setTextColor(
                 ContextCompat.getColor(
-                    holder.enemyUserNameTextView.context,
-                    R.color.error_red
+                    holder.enemyUserNameTextView.context, R.color.error_red
                 )
             )
+        }*/
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
+        return HistoryViewHolder.from(parent)
+    }
+
+    fun setData(value: List<Game>, updateRange: IntRange?) {
+        // TODO: This needs some serious rework
+        val old = data
+        data = value
+        when {
+            updateRange == null -> {
+                notifyDataSetChanged()
+            }
+            old.size >= data.size -> {
+                notifyItemRangeRemoved(0, old.size)
+            }
+            else -> {
+                notifyItemRangeChanged(updateRange.first, updateRange.last)
+            }
         }
     }
 
-    override fun getItemCount() = dataSet.size
+
+    class HistoryViewHolder(private val binding: HistoryRowItemBinding) : RecyclerView.ViewHolder(
+        binding.root
+    ) {
+        fun bind(item: Game) {
+            binding.apply {
+                // TODO: too much to think right now
+                enemyUserName.text = item.player2Id
+               /* if (dataSet[position].won) {
+                    holder.wonLostTextView.setText(R.string.won)
+                    holder.wonLostTextView.setTextColor(
+                        ContextCompat.getColor(
+                            holder.enemyUserNameTextView.context, R.color.success_green
+                        )
+                    )
+                } else {
+                    holder.wonLostTextView.setText(R.string.lost)
+                    holder.wonLostTextView.setTextColor(
+                        ContextCompat.getColor(
+                            holder.enemyUserNameTextView.context, R.color.error_red
+                        )
+                    )
+                }*/
+            }
+        }
+        //val enemyUserNameTextView: TextView = view.findViewById(R.id.enemy_user_name)
+        //val wonLostTextView: TextView = view.findViewById(R.id.won_lost)
+
+        companion object {
+            fun from(parent: ViewGroup): HistoryViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = HistoryRowItemBinding.inflate(layoutInflater, parent, false)
+                return HistoryViewHolder(binding)
+            }
+        }
+    }
+
+
 }

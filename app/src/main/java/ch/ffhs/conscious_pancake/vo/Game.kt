@@ -3,9 +3,10 @@ package ch.ffhs.conscious_pancake.vo
 import androidx.databinding.Bindable
 import ch.ffhs.conscious_pancake.BR
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.QueryDocumentSnapshot
 
-class Game : BaseModel() {
+open class Game : BaseModel() {
 
     @get:Bindable
     var id: String = ""
@@ -53,6 +54,24 @@ class Game : BaseModel() {
             val old = field
             field = value
             applyChanges(old, value, BR.player1Id)
+        }
+
+    @get:Bindable
+    @get:Exclude
+    var player1: User? = null
+        set (value) {
+            val old = field
+            field = value
+            applyChanges(old, value, BR.player1)
+        }
+
+    @get:Bindable
+    @get:Exclude
+    var player2: User? = null
+        set (value) {
+            val old = field
+            field = value
+            applyChanges(old, value, BR.player2)
         }
 
     companion object {

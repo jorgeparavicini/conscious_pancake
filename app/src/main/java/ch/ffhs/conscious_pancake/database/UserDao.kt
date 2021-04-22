@@ -31,7 +31,7 @@ class UserDao @Inject constructor(@ApplicationContext private val context: Conte
                     ctx.resume(Resource.error("Could not fetch user document.", null))
                 }
             }.addOnFailureListener {
-                Timber.e("Failed fetching user document. $it")
+                Timber.e("Failed fetching user document $uid. $it")
                 ctx.resume(Resource.error("Could not fetch user document.", null))
             }
         }
