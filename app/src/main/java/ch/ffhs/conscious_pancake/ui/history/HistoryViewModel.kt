@@ -5,9 +5,7 @@ import ch.ffhs.conscious_pancake.repository.HistoryRepository
 import ch.ffhs.conscious_pancake.repository.UserRepository
 import ch.ffhs.conscious_pancake.repository.cache.CachePolicy
 import ch.ffhs.conscious_pancake.repository.cache.CachePolicyType
-import ch.ffhs.conscious_pancake.ui.lobby.LobbyViewModel
 import ch.ffhs.conscious_pancake.vo.Game
-import ch.ffhs.conscious_pancake.vo.Resource
 import ch.ffhs.conscious_pancake.vo.Status
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -28,7 +26,7 @@ class HistoryViewModel @Inject constructor(
     private val limit: Long = 10
 
     private val userId: String
-        get() = savedStateHandle.get<String>(HistoryViewModel.USER_ID_ARG_NAME)!!
+        get() = savedStateHandle.get<String>(USER_ID_ARG_NAME)!!
 
     private val _history = MutableLiveData<List<Game>>()
     val history: LiveData<List<Game>>
