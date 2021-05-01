@@ -2,43 +2,37 @@ package ch.ffhs.conscious_pancake.repository
 
 import ch.ffhs.conscious_pancake.database.UserDao
 import ch.ffhs.conscious_pancake.database.UserProfilePictureDao
+import ch.ffhs.conscious_pancake.repository.cache.CachePolicy
+import ch.ffhs.conscious_pancake.repository.cache.CachePolicyRepository
 import ch.ffhs.conscious_pancake.repository.contracts.IUserRepository
-import ch.ffhs.conscious_pancake.utils.RefreshableLiveData
 import ch.ffhs.conscious_pancake.vo.Resource
 import ch.ffhs.conscious_pancake.vo.Status
 import ch.ffhs.conscious_pancake.vo.User
 import kotlinx.coroutines.*
-import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class UserRepository @Inject constructor(
     private val userDao: UserDao, private val userProfilePictureDao: UserProfilePictureDao
-) : IUserRepository {
+) : CachePolicyRepository<User>(), IUserRepository {
 
-    private val userCache = ConcurrentHashMap<String, RefreshableLiveData<Resource<User>>>()
-
-    override fun getUser(
-        userId: String
-    ): RefreshableLiveData<Resource<User>> {
-        if (!userCache.containsKey(userId)) {
-            val refreshable = RefreshableLiveData {
-                val userResult = userDao.findByUid(userId)
-                if (userResult.status == Status.SUCCESS && userResult.data?.imageUUID != null) {
-                    val profilePictureResult = userProfilePictureDao.loadImage(
-                        userId, userResult.data.imageUUID!!
-                    )
-                    if (profilePictureResult.status == Status.SUCCESS) {
-                        userResult.data.profilePictureUri = profilePictureResult.data
-                    }
+    override suspend fun getUser(
+        userId: String, cachePolicy: CachePolicy
+    ): Resource<User> = withContext(Dispatchers.IO) {
+        return@withContext fetch(userId, cachePolicy) {
+            val userResult = userDao.findByUid(userId)
+            if (userResult.status == Status.SUCCESS && userResult.data?.imageUUID != null) {
+                val profilePictureResult = userProfilePictureDao.loadImage(
+                    userId, userResult.data.imageUUID!!
+                )
+                if (profilePictureResult.status == Status.SUCCESS) {
+                    userResult.data.profilePictureUri = profilePictureResult.data
                 }
-                userResult.data?.startTracking()
-                userResult
             }
-            userCache[userId] = refreshable
+            userResult.data?.startTracking()
+            return@fetch userResult
         }
-        return userCache[userId]!!
     }
 
     override suspend fun updateUser(

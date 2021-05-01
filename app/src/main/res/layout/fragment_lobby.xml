@@ -45,8 +45,7 @@
                 <androidx.core.widget.NestedScrollView
                     isVisible="@{lobbyViewModel.hasGames}"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="visible">
+                    android:layout_height="match_parent">
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout

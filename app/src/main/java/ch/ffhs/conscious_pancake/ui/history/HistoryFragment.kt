@@ -4,34 +4,71 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.ffhs.conscious_pancake.R
+import ch.ffhs.conscious_pancake.databinding.FragmentHistoryBinding
+import ch.ffhs.conscious_pancake.databinding.FragmentLobbyBinding
+import ch.ffhs.conscious_pancake.ui.lobby.LobbyViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
-class HistoryFragment : Fragment(R.layout.fragment_history) {
+@AndroidEntryPoint
+class HistoryFragment : Fragment() {
+    private val viewModel: HistoryViewModel by viewModels()
+
+    private var _binding: FragmentHistoryBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        Timber.i("History Created")
-        return super.onCreateView(inflater, container, savedInstanceState)
+    ): View {
+        _binding = FragmentHistoryBinding.inflate(inflater, container, false)
+
+        val adapter = HistoryAdapter()
+
+        viewModel.apply {
+            errorMessage.observe(viewLifecycleOwner) {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            }
+
+            history.observe(viewLifecycleOwner) {
+                it.let {
+                    adapter.setData(it, null)
+                }
+            }
+
+            isLoading.observe(viewLifecycleOwner) {
+                binding.historySwipeRefresh.isRefreshing = it
+            }
+
+            binding.historySwipeRefresh.setOnRefreshListener {
+                reloadGames()
+            }
+            binding.historyLoadMore.setOnClickListener { loadMoreGames() }
+        }
+
+
+
+        return binding.apply {
+            historyViewModel = viewModel
+            lifecycleOwner = viewLifecycleOwner
+
+            val lm = LinearLayoutManager(activity)
+            historyList.layoutManager = lm
+            historyList.adapter = adapter
+            historyList.addItemDecoration(DividerItemDecoration(historyList.context, lm.orientation))
+        }.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        /*val list = view.findViewById<RecyclerView>(R.id.history_list)
-        list.apply {
-            setHasFixedSize(true)
-            val lm = LinearLayoutManager(activity)
-            layoutManager = lm
-            adapter = HistoryAdapter(data)
-            addItemDecoration(DividerItemDecoration(list.context, lm.orientation))
-        }*/
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

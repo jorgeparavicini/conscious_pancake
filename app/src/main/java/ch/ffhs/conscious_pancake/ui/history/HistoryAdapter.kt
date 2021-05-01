@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ch.ffhs.conscious_pancake.R
 import ch.ffhs.conscious_pancake.databinding.HistoryRowItemBinding
 import ch.ffhs.conscious_pancake.vo.Game
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
@@ -19,22 +21,6 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() 
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
         val item = data[position]
         holder.bind(item)
-        /*holder.enemyUserNameTextView.text = dataSet[position].enemyUserName
-        if (dataSet[position].won) {
-            holder.wonLostTextView.setText(R.string.won)
-            holder.wonLostTextView.setTextColor(
-                ContextCompat.getColor(
-                    holder.enemyUserNameTextView.context, R.color.success_green
-                )
-            )
-        } else {
-            holder.wonLostTextView.setText(R.string.lost)
-            holder.wonLostTextView.setTextColor(
-                ContextCompat.getColor(
-                    holder.enemyUserNameTextView.context, R.color.error_red
-                )
-            )
-        }*/
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
@@ -62,31 +48,32 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() 
     class HistoryViewHolder(private val binding: HistoryRowItemBinding) : RecyclerView.ViewHolder(
         binding.root
     ) {
+
         fun bind(item: Game) {
             binding.apply {
-                // TODO: too much to think right now
-                enemyUserName.text = item.player2Id
-               /* if (dataSet[position].won) {
-                    holder.wonLostTextView.setText(R.string.won)
-                    holder.wonLostTextView.setTextColor(
+                val user = Firebase.auth.currentUser!!.uid
+                enemyUserName.text =
+                    if (user == item.player1Id) item.player1?.username else item.player2?.username
+                if (item.winner == user) {
+                    wonLost.setText(R.string.won)
+                    wonLost.setTextColor(
                         ContextCompat.getColor(
-                            holder.enemyUserNameTextView.context, R.color.success_green
+                            binding.enemyUserName.context, R.color.success_green
                         )
                     )
                 } else {
-                    holder.wonLostTextView.setText(R.string.lost)
-                    holder.wonLostTextView.setTextColor(
+                    wonLost.setText(R.string.lost)
+                    wonLost.setTextColor(
                         ContextCompat.getColor(
-                            holder.enemyUserNameTextView.context, R.color.error_red
+                            binding.enemyUserName.context, R.color.error_red
                         )
                     )
-                }*/
+                }
             }
         }
-        //val enemyUserNameTextView: TextView = view.findViewById(R.id.enemy_user_name)
-        //val wonLostTextView: TextView = view.findViewById(R.id.won_lost)
 
         companion object {
+
             fun from(parent: ViewGroup): HistoryViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = HistoryRowItemBinding.inflate(layoutInflater, parent, false)

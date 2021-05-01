@@ -20,11 +20,11 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class LobbyFragment : Fragment() {
+    private val viewModel: LobbyViewModel by viewModels()
 
     private var _binding: FragmentLobbyBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: LobbyViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -32,6 +32,10 @@ class LobbyFragment : Fragment() {
         _binding = FragmentLobbyBinding.inflate(inflater, container, false)
 
         val adapter = LobbyAdapter()
+
+        viewModel.errorMessage.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        }
 
         return binding.apply {
             lobbyViewModel = viewModel
@@ -46,14 +50,9 @@ class LobbyFragment : Fragment() {
                 lobbySwipeRefresh.isRefreshing = it
             }
 
-            viewModel.games.observe(viewLifecycleOwner) {
+            viewModel.lobbies.observe(viewLifecycleOwner) {
                 it.let {
-                    if (it.status == Status.ERROR) {
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
-                    } else {
-                        Timber.i("Updated range: ${viewModel.updatedRange.first} - ${viewModel.updatedRange.last}")
-                        adapter.setData(it.data!!, viewModel.updatedRange)
-                    }
+                    adapter.setData(it, null)
                 }
             }
 

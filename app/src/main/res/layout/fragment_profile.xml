@@ -32,7 +32,7 @@
                     android:layout_height="match_parent"
                     android:contentDescription="@string/profile_image_description"
                     android:scaleType="fitCenter"
-                    android:src="@{profileViewModel.user.data.profilePictureUri, default=@drawable/ic_face_black_24dp}"
+                    android:src="@{profileViewModel.user.profilePictureUri, default=@drawable/ic_face_black_24dp}"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <Button
@@ -72,7 +72,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:text="@{profileViewModel.user.data.username}" />
+                    android:text="@{profileViewModel.user.username}" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     isVisible="@{profileViewModel.isEditing()}"
@@ -89,7 +89,7 @@
                         android:autofillHints="username"
                         android:hint="@string/username"
                         android:inputType="text"
-                        android:text="@={profileViewModel.user.data.username}" />
+                        android:text="@={profileViewModel.user.username}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -118,7 +118,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:text="@{profileViewModel.user.data.firstName}" />
+                    android:text="@{profileViewModel.user.firstName}" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     isVisible="@{profileViewModel.isEditing()}"
@@ -135,7 +135,7 @@
                         android:autofillHints="name"
                         android:hint="@string/first_name"
                         android:inputType="text"
-                        android:text="@={profileViewModel.user.data.firstName}" />
+                        android:text="@={profileViewModel.user.firstName}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -163,7 +163,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:text="@{profileViewModel.user.data.lastName}" />
+                    android:text="@{profileViewModel.user.lastName}" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     isVisible="@{profileViewModel.isEditing()}"
@@ -180,14 +180,14 @@
                         android:autofillHints="name"
                         android:hint="@string/last_name"
                         android:inputType="text"
-                        android:text="@={profileViewModel.user.data.lastName}" />
+                        android:text="@={profileViewModel.user.lastName}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <Button
                 android:id="@+id/update_profile_button"
-                isVisible="@{profileViewModel.user.data.isDirty}"
+                isVisible="@{profileViewModel.user.isDirty}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"

@@ -32,4 +32,5 @@
     <string name="load_more">Load more</string>
     <string name="logout">Logout</string>
     <string name="no_games_lobby">No current games. Start a new game by clicking on the play button.</string>
+    <string name="history_title">Past Games</string>
 </resources>
