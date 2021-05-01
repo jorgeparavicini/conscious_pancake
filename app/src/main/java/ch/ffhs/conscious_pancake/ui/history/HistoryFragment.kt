@@ -9,13 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import ch.ffhs.conscious_pancake.R
 import ch.ffhs.conscious_pancake.databinding.FragmentHistoryBinding
-import ch.ffhs.conscious_pancake.databinding.FragmentLobbyBinding
-import ch.ffhs.conscious_pancake.ui.lobby.LobbyViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class HistoryFragment : Fragment() {

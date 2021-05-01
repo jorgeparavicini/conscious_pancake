@@ -9,7 +9,6 @@ import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import ch.ffhs.conscious_pancake.R
 import ch.ffhs.conscious_pancake.databinding.FragmentHomeBinding
-import ch.ffhs.conscious_pancake.ui.lobby.LobbyViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -38,11 +37,11 @@ class HomeFragment : Fragment(R.layout.fragment_home),
 
         homePagerAdapter.setItems(
             arrayListOf(
-                HomeScreen.LOBBY, HomeScreen.HISTORY, HomeScreen.PROFILE
+                HomeScreen.GAMES, HomeScreen.HISTORY, HomeScreen.PROFILE
             )
         )
 
-        val defaultScreen = HomeScreen.LOBBY
+        val defaultScreen = HomeScreen.GAMES
         goToScreen(defaultScreen)
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener(this)

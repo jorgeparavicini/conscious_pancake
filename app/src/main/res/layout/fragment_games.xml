@@ -6,7 +6,7 @@
 
         <variable
             name="lobbyViewModel"
-            type="ch.ffhs.conscious_pancake.ui.lobby.LobbyViewModel" />
+            type="ch.ffhs.conscious_pancake.ui.games.GamesViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -1,18 +1,13 @@
-package ch.ffhs.conscious_pancake.ui.lobby
+package ch.ffhs.conscious_pancake.ui.games
 
-import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.*
 import ch.ffhs.conscious_pancake.repository.LobbyRepository
 import ch.ffhs.conscious_pancake.repository.UserRepository
 import ch.ffhs.conscious_pancake.repository.cache.CachePolicy
 import ch.ffhs.conscious_pancake.repository.cache.CachePolicyType
 import ch.ffhs.conscious_pancake.vo.Game
-import ch.ffhs.conscious_pancake.vo.Resource
 import ch.ffhs.conscious_pancake.vo.Status
-import com.google.android.gms.common.UserRecoverableException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -20,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LobbyViewModel @Inject constructor(
+class GamesViewModel @Inject constructor(
     private val lobbyRepo: LobbyRepository,
     private val userRepo: UserRepository,
     private val savedStateHandle: SavedStateHandle

@@ -1,13 +1,12 @@
-package ch.ffhs.conscious_pancake.ui.lobby
+package ch.ffhs.conscious_pancake.ui.games
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ch.ffhs.conscious_pancake.R
 import ch.ffhs.conscious_pancake.databinding.LobbyRowItemBinding
 import ch.ffhs.conscious_pancake.vo.Game
 
-class LobbyAdapter : RecyclerView.Adapter<LobbyAdapter.LobbyViewHolder>() {
+class GamesAdaptor : RecyclerView.Adapter<GamesAdaptor.LobbyViewHolder>() {
 
     private var data = listOf<Game>()
 
