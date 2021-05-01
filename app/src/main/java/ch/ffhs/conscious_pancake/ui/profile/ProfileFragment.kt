@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import ch.ffhs.conscious_pancake.BuildConfig
 import ch.ffhs.conscious_pancake.R
 import ch.ffhs.conscious_pancake.databinding.FragmentProfileBinding
+import ch.ffhs.conscious_pancake.repository.cache.CachePolicyType
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.io.File
@@ -45,6 +46,10 @@ class ProfileFragment : Fragment() {
     ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
 
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            binding.profileSwipeRefresh.isRefreshing = it
+        }
+
         return binding.apply {
             profileViewModel = viewModel
             lifecycleOwner = viewLifecycleOwner
@@ -59,16 +64,10 @@ class ProfileFragment : Fragment() {
                 dropFocusOnEnter(v, k)
             }
 
-            profileSwipeRefresh.isRefreshing = true
-
-            viewModel.user.observe(viewLifecycleOwner) {
-                profileSwipeRefresh.isRefreshing = false
-            }
-
             profileSwipeRefresh.setOnRefreshListener {
-                profileSwipeRefresh.isRefreshing = true
-                viewModel.reloadUser()
+                viewModel.reloadUser(CachePolicyType.REFRESH)
             }
+
             updateProfileButton.setOnClickListener { viewModel.saveChanges() }
         }.root
     }

@@ -59,6 +59,10 @@ class ProfileViewModel @Inject constructor(
     val user: LiveData<User>
         get() = _user
 
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
     init {
         reloadUser()
     }
@@ -81,17 +85,19 @@ class ProfileViewModel @Inject constructor(
             }
             _isEditing.value = false
         }
-
     }
 
-    fun reloadUser() {
+    fun reloadUser(cachePolicyType: CachePolicyType = CachePolicyType.ALWAYS) {
+        _isLoading.value = true
         viewModelScope.launch {
-            val userRequest = userRepo.getUser(userId, CachePolicy(CachePolicyType.ALWAYS))
+            val userRequest = userRepo.getUser(userId, CachePolicy(cachePolicyType))
             if (userRequest.status == Status.SUCCESS) {
                 _user.value = userRequest.data!!
             } else {
                 _errorMessage.value = userRequest.message ?: "A generic error occurred"
             }
+
+            _isLoading.value = false
         }
     }
 
