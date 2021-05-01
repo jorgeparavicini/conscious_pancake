@@ -1,4 +1,4 @@
-package ch.ffhs.conscious_pancake.vo
+package ch.ffhs.conscious_pancake.vo.enums
 
 enum class Status {
     SUCCESS,

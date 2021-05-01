@@ -1,7 +1,7 @@
 package ch.ffhs.conscious_pancake.repository.cache
 
 import ch.ffhs.conscious_pancake.vo.Resource
-import ch.ffhs.conscious_pancake.vo.Status
+import ch.ffhs.conscious_pancake.vo.enums.Status
 import java.util.concurrent.ConcurrentHashMap
 
 open class CachePolicyRepository<T> {

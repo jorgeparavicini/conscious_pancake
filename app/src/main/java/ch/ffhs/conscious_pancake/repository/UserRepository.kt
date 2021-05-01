@@ -6,7 +6,7 @@ import ch.ffhs.conscious_pancake.repository.cache.CachePolicy
 import ch.ffhs.conscious_pancake.repository.cache.CachePolicyRepository
 import ch.ffhs.conscious_pancake.repository.contracts.IUserRepository
 import ch.ffhs.conscious_pancake.vo.Resource
-import ch.ffhs.conscious_pancake.vo.Status
+import ch.ffhs.conscious_pancake.vo.enums.Status
 import ch.ffhs.conscious_pancake.vo.User
 import kotlinx.coroutines.*
 import javax.inject.Inject

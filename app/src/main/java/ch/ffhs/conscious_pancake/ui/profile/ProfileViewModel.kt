@@ -1,14 +1,12 @@
 package ch.ffhs.conscious_pancake.ui.profile
 
 import android.net.Uri
-import android.widget.Toast
 import androidx.lifecycle.*
 import ch.ffhs.conscious_pancake.repository.UserRepository
 import ch.ffhs.conscious_pancake.repository.cache.CachePolicy
 import ch.ffhs.conscious_pancake.repository.cache.CachePolicyType
 import ch.ffhs.conscious_pancake.utils.fileName
-import ch.ffhs.conscious_pancake.vo.Resource
-import ch.ffhs.conscious_pancake.vo.Status
+import ch.ffhs.conscious_pancake.vo.enums.Status
 import ch.ffhs.conscious_pancake.vo.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase

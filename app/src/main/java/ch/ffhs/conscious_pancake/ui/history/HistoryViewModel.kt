@@ -6,7 +6,7 @@ import ch.ffhs.conscious_pancake.repository.UserRepository
 import ch.ffhs.conscious_pancake.repository.cache.CachePolicy
 import ch.ffhs.conscious_pancake.repository.cache.CachePolicyType
 import ch.ffhs.conscious_pancake.vo.Game
-import ch.ffhs.conscious_pancake.vo.Status
+import ch.ffhs.conscious_pancake.vo.enums.Status
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll

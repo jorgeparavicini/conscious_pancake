@@ -1,12 +1,12 @@
 package ch.ffhs.conscious_pancake.ui.games
 
 import androidx.lifecycle.*
-import ch.ffhs.conscious_pancake.repository.LobbyRepository
+import ch.ffhs.conscious_pancake.repository.GameRepository
 import ch.ffhs.conscious_pancake.repository.UserRepository
 import ch.ffhs.conscious_pancake.repository.cache.CachePolicy
 import ch.ffhs.conscious_pancake.repository.cache.CachePolicyType
 import ch.ffhs.conscious_pancake.vo.Game
-import ch.ffhs.conscious_pancake.vo.Status
+import ch.ffhs.conscious_pancake.vo.enums.Status
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GamesViewModel @Inject constructor(
-    private val lobbyRepo: LobbyRepository,
+    private val gameRepo: GameRepository,
     private val userRepo: UserRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -63,7 +63,7 @@ class GamesViewModel @Inject constructor(
     fun reloadGames(cachePolicyType: CachePolicyType = CachePolicyType.REFRESH) {
         _isLoading.value = true
         viewModelScope.launch {
-            val request = lobbyRepo.getLobbies(userId, CachePolicy(cachePolicyType), limit)
+            val request = gameRepo.getLobbies(userId, CachePolicy(cachePolicyType), limit)
             if (request.status != Status.SUCCESS) {
                 request.message.let {
                     _errorMessage.value = it
@@ -81,7 +81,7 @@ class GamesViewModel @Inject constructor(
         _isLoading.value = true
         viewModelScope.launch {
             val request =
-                lobbyRepo.getNextLobbies(userId, CachePolicy((CachePolicyType.REFRESH)), limit)
+                gameRepo.getNextLobbies(userId, CachePolicy((CachePolicyType.REFRESH)), limit)
             if (request.status != Status.SUCCESS) {
                 request.message.let {
                     _errorMessage.value = it
