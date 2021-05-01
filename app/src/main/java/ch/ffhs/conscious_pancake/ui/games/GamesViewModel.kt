@@ -107,7 +107,11 @@ class GamesViewModel @Inject constructor(
         }
 
         // Update can load more
-        _canLoadMore.value = newSize - (oldSize ?: 0) >= limit || didReload
+        _canLoadMore.value = if (didReload) {
+            newSize >= limit
+        } else {
+            newSize - (oldSize ?: 0) >= limit
+        }
 
         _lobbies.value = newValue
         _isLoading.value = false

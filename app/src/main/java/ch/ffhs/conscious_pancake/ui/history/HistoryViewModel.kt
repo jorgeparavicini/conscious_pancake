@@ -107,7 +107,12 @@ class HistoryViewModel @Inject constructor(
             IntRange(oldSize, newSize)
         }
 
-        _canLoadMore.value = newSize - (oldSize ?: 0) >= limit || didReload
+        _canLoadMore.value = if (didReload) {
+            newSize >= limit
+        } else {
+            newSize - (oldSize ?: 0) >= limit
+        }
+
         _history.value = newValue
         _isLoading.value = false
     }
