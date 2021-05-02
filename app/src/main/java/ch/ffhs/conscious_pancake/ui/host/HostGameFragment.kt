@@ -7,13 +7,17 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import ch.ffhs.conscious_pancake.databinding.FragmentHostGameBinding
+import ch.ffhs.conscious_pancake.ui.home.HomeFragmentDirections
 import ch.ffhs.conscious_pancake.vo.enums.GameSize
 import ch.ffhs.conscious_pancake.vo.enums.PartyType
 import ch.ffhs.conscious_pancake.vo.enums.TurnDuration
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class HostGameFragment : Fragment() {
@@ -96,9 +100,18 @@ class HostGameFragment : Fragment() {
 
             hostGameStart.setOnClickListener {
                 viewModel.hostGame {
+                    requireView().findNavController()
+                            .navigate(
+                                HostGameFragmentDirections.actionHostGameFragmentToLobbyFragment(it.id)
+                            )
                 }
             }
         }
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

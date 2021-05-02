@@ -6,15 +6,19 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import ch.ffhs.conscious_pancake.R
 import ch.ffhs.conscious_pancake.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var navController: NavController
+
+    private val navController by lazy {
+        (supportFragmentManager.findFragmentById(R.id.navigation_host) as NavHostFragment).navController
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,20 +26,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.titleFragment, R.id.homeFragment))
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.navigation_host) as NavHostFragment
-        navController = navHostFragment.navController
-
-        NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration)
-
         binding.toolbar.setupWithNavController(
-            navController, appBarConfiguration
+            navController, AppBarConfiguration(setOf(R.id.homeFragment, R.id.titleFragment))
         )
 
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp()
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 }
