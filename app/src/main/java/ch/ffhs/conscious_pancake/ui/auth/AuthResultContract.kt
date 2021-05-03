@@ -17,7 +17,7 @@ class AuthResultContract : ActivityResultContract<Int, IdpResponse>() {
         AuthUI.getInstance().createSignInIntentBuilder()
             .setLogo(R.drawable.common_google_signin_btn_icon_dark)
             .setTheme(R.style.Theme_ConsciousPancake_Auth).setAvailableProviders(providers)
-            .setIsSmartLockEnabled(true).build().apply { putExtra(INPUT_INT, input) }
+            .setIsSmartLockEnabled(false).build().apply { putExtra(INPUT_INT, input) }
 
     override fun parseResult(resultCode: Int, intent: Intent?): IdpResponse? = when (resultCode) {
         Activity.RESULT_OK -> IdpResponse.fromResultIntent(intent)
