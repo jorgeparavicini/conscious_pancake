@@ -18,5 +18,4 @@
 
     <style name="Theme.ConsciousPancake.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar" />
 
-    <style name="Theme.ConsciousPancake.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 </resources>

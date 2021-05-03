@@ -2,19 +2,14 @@ package ch.ffhs.conscious_pancake.ui.lobby
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import ch.ffhs.conscious_pancake.databinding.FragmentHostGameBinding
 import ch.ffhs.conscious_pancake.databinding.FragmentLobbyBinding
-import ch.ffhs.conscious_pancake.ui.host.HostGameViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class LobbyFragment : Fragment() {

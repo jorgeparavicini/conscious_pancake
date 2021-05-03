@@ -22,7 +22,7 @@ class LobbyViewModel @Inject constructor(
     private val isHost: Boolean
         get() = savedStateHandle.get<Boolean>(IS_HOST_ARG_NAME)!!
 
-    private val lobby = Transformations.map(lobbyRepo.getLiveLobby(lobbyId)) {
+    val lobby = Transformations.map(lobbyRepo.getLiveLobby(lobbyId)) {
         if (it.status == Status.SUCCESS) {
             return@map it.data!!
         } else {

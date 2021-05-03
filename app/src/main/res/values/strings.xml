@@ -1,15 +1,10 @@
 <resources>
     <string name="app_name">Conscious Pancake</string>
-    <string name="play">Play</string>
     <string name="history">History</string>
-    <string name="player">Player #</string>
-    <string name="app_image">App_Image</string>
-    <string name="statistics">Statistics</string>
     <string name="lobby">Lobby</string>
     <string name="profile">Profile</string>
     <string name="games_in_progress">Games in progress</string>
     <string name="watch">watch</string>
-    <string name="new_game">New Game</string>
     <string name="won">Won</string>
     <string name="lost">Lost</string>
     <string name="profile_image_description">Profile image description</string>
@@ -17,9 +12,6 @@
     <string name="username">Username</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
-    <string name="email_address">Email address</string>
-    <string name="profile_uid">UID</string>
-    <string name="unexpected_error">An unexpected error occurred</string>
     <string name="update_profile">Update Profile</string>
     <string name="edit">Edit</string>
     <string name="profile_picture_upload_failed">Failed to upload profile picture.</string>

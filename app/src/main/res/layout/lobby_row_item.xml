@@ -68,8 +68,7 @@
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="1"
-        android:scrollHorizontally="true"
-        android:text="5:2" />
+        android:scrollHorizontally="true" />
 
     <Button
         android:layout_width="0dp"

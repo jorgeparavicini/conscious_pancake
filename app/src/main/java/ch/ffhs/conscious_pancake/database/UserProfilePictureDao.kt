@@ -3,12 +3,10 @@ package ch.ffhs.conscious_pancake.database
 import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import ch.ffhs.conscious_pancake.R
 import ch.ffhs.conscious_pancake.database.contracts.IUserProfilePictureDao
-import ch.ffhs.conscious_pancake.vo.Resource
 import ch.ffhs.conscious_pancake.utils.fileName
+import ch.ffhs.conscious_pancake.vo.Resource
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.qualifiers.ApplicationContext
