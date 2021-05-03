@@ -78,7 +78,9 @@ class HomeFragment : Fragment(R.layout.fragment_home),
 
     private fun logout(): Boolean {
         Firebase.auth.signOut()
-        requireView().findNavController().popBackStack(R.id.titleFragment, false)
+        val navController = requireView().findNavController()
+        navController.popBackStack(R.id.homeFragment, true)
+        navController.navigate(R.id.titleFragment)
         return true
     }
 
