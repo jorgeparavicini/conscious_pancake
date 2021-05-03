@@ -37,7 +37,10 @@ class LobbyFragment : Fragment() {
     ): View {
         _binding = FragmentLobbyBinding.inflate(inflater, container, false)
 
-        return binding.apply {  }.root
+        return binding.apply {
+            lobbyViewModel = viewModel
+            lifecycleOwner = viewLifecycleOwner
+        }.root
     }
 
     override fun onDestroyView() {

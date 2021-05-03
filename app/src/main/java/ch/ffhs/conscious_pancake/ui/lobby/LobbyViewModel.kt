@@ -31,6 +31,10 @@ class LobbyViewModel @Inject constructor(
         }
     }
 
+    val canStartGame = Transformations.map(lobby) {
+        it?.player2 != null
+    }
+
     fun leaveLobby() {
         if (isHost) {
             viewModelScope.launch {
