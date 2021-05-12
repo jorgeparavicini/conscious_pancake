@@ -1,19 +1,24 @@
 package ch.ffhs.conscious_pancake.ui.lobby
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import ch.ffhs.conscious_pancake.repository.LobbyRepository
+import ch.ffhs.conscious_pancake.repository.UserRepository
+import ch.ffhs.conscious_pancake.repository.cache.CachePolicy
+import ch.ffhs.conscious_pancake.repository.cache.CachePolicyType
+import ch.ffhs.conscious_pancake.vo.Lobby
 import ch.ffhs.conscious_pancake.vo.enums.Status
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class LobbyViewModel @Inject constructor(
-    private val lobbyRepo: LobbyRepository, private val savedStateHandle: SavedStateHandle
+    private val lobbyRepo: LobbyRepository,
+    private val userRepo: UserRepository,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val lobbyId: String
@@ -22,17 +27,29 @@ class LobbyViewModel @Inject constructor(
     private val isHost: Boolean
         get() = savedStateHandle.get<Boolean>(IS_HOST_ARG_NAME)!!
 
-    val lobby = Transformations.map(lobbyRepo.getLiveLobby(lobbyId)) {
+    private val _lobbyDestroyed = MutableLiveData(false)
+    val lobbyDestroyed: LiveData<Boolean>
+        get() = _lobbyDestroyed
+
+    private var initialized = false
+
+    val lobby = Transformations.switchMap(lobbyRepo.getLiveLobby(lobbyId)) {
         if (it.status == Status.SUCCESS) {
-            return@map it.data!!
+            it.data?.let { l ->
+                return@switchMap fetchUsersForLobby(l)
+            } ?: run {
+                Timber.i("Lobby closed by host")
+                _lobbyDestroyed.value = true
+                return@switchMap null
+            }
         } else {
             Timber.e("Could not fetch lobby")
-            return@map null
+            return@switchMap null
         }
     }
 
     val canStartGame = Transformations.map(lobby) {
-        it?.player2 != null
+        it?.player2 != null && isHost
     }
 
     fun leaveLobby() {
@@ -40,7 +57,23 @@ class LobbyViewModel @Inject constructor(
             viewModelScope.launch {
                 lobbyRepo.deleteLobby(lobbyId)
             }
+        } else {
+            viewModelScope.launch {
+                lobbyRepo.leaveLobby(lobbyId, Firebase.auth.currentUser!!.uid)
+            }
         }
+    }
+
+    private fun fetchUsersForLobby(lobby: Lobby): LiveData<Lobby> {
+        val data = MutableLiveData(lobby)
+        viewModelScope.launch {
+            lobby.host = userRepo.getUser(lobby.hostId, CachePolicy(CachePolicyType.ALWAYS)).data
+            lobby.player2Id?.let {
+                lobby.player2 = userRepo.getUser(it, CachePolicy(CachePolicyType.ALWAYS)).data
+            }
+            data.value = lobby
+        }
+        return data
     }
 
     companion object {

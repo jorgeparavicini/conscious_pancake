@@ -1,6 +1,6 @@
 package ch.ffhs.conscious_pancake.vo.enums
 
-enum class TurnDuration(private val displayName: String, val index: Int) {
+enum class TurnDuration(val displayName: String, val index: Int) {
 
     H24("24H", 0),
     H12("12H", 1),

@@ -5,6 +5,7 @@ import ch.ffhs.conscious_pancake.BR
 import ch.ffhs.conscious_pancake.vo.enums.GameSize
 import ch.ffhs.conscious_pancake.vo.enums.PartyType
 import ch.ffhs.conscious_pancake.vo.enums.TurnDuration
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Exclude
 
@@ -59,6 +60,9 @@ class Lobby() : BaseModel() {
             applyChanges(old, value, BR.player2Id)
         }
 
+    var createdAt: Timestamp = Timestamp.now()
+        private set
+
     @get:Bindable
     @get:Exclude
     var host: User? = null
@@ -83,8 +87,7 @@ class Lobby() : BaseModel() {
 
     companion object {
 
-        fun fromFirebase(snapshot: DocumentSnapshot): Lobby? {
-            if (!snapshot.exists()) return null
+        fun fromFirebase(snapshot: DocumentSnapshot): Lobby {
             return Lobby().apply {
                 id = snapshot.id
                 partyType = PartyType.valueOf(snapshot.getString("partyType")!!)
@@ -92,6 +95,7 @@ class Lobby() : BaseModel() {
                 turnDuration = TurnDuration.valueOf(snapshot.getString("turnDuration")!!)
                 hostId = snapshot.getString("hostId")!!
                 player2Id = snapshot.getString("player2Id")
+                createdAt = snapshot.get("createdAt", Timestamp::class.java)!!
             }
         }
     }

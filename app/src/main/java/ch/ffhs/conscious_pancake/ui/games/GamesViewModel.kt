@@ -63,7 +63,7 @@ class GamesViewModel @Inject constructor(
     fun reloadGames(cachePolicyType: CachePolicyType = CachePolicyType.REFRESH) {
         _isLoading.value = true
         viewModelScope.launch {
-            val request = gameRepo.getLobbies(userId, CachePolicy(cachePolicyType), limit)
+            val request = gameRepo.getGames(userId, CachePolicy(cachePolicyType), limit)
             if (request.status != Status.SUCCESS) {
                 request.message.let {
                     _errorMessage.value = it
@@ -81,7 +81,7 @@ class GamesViewModel @Inject constructor(
         _isLoading.value = true
         viewModelScope.launch {
             val request =
-                gameRepo.getNextLobbies(userId, CachePolicy((CachePolicyType.REFRESH)), limit)
+                gameRepo.getNextGames(userId, CachePolicy((CachePolicyType.REFRESH)), limit)
             if (request.status != Status.SUCCESS) {
                 request.message.let {
                     _errorMessage.value = it

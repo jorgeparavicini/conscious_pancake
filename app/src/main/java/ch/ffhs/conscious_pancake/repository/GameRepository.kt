@@ -3,7 +3,7 @@ package ch.ffhs.conscious_pancake.repository
 import ch.ffhs.conscious_pancake.database.GameDao
 import ch.ffhs.conscious_pancake.repository.cache.CachePolicy
 import ch.ffhs.conscious_pancake.repository.cache.CachePolicyRepository
-import ch.ffhs.conscious_pancake.repository.contracts.ILobbyRepository
+import ch.ffhs.conscious_pancake.repository.contracts.IGameRepository
 import ch.ffhs.conscious_pancake.vo.Game
 import ch.ffhs.conscious_pancake.vo.Resource
 import kotlinx.coroutines.*
@@ -13,9 +13,9 @@ import javax.inject.Singleton
 @Singleton
 class GameRepository @Inject constructor(
     private val gameDao: GameDao
-) : CachePolicyRepository<List<Game>>(), ILobbyRepository {
+) : CachePolicyRepository<List<Game>>(), IGameRepository {
 
-    override suspend fun getLobbies(
+    override suspend fun getGames(
         uid: String, cachePolicy: CachePolicy, limit: Long
     ): Resource<List<Game>> = withContext(Dispatchers.IO) {
         return@withContext fetch(uid, cachePolicy) {
@@ -23,7 +23,7 @@ class GameRepository @Inject constructor(
         }
     }
 
-    override suspend fun getNextLobbies(
+    override suspend fun getNextGames(
         uid: String, cachePolicy: CachePolicy, limit: Long
     ): Resource<List<Game>> = withContext(Dispatchers.IO) {
         return@withContext fetch(uid, cachePolicy) {

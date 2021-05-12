@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import ch.ffhs.conscious_pancake.databinding.FragmentLobbyBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class LobbyFragment : Fragment() {
@@ -20,22 +22,23 @@ class LobbyFragment : Fragment() {
 
     private val viewModel: LobbyViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setHasOptionsMenu(true)
-
-        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            viewModel.leaveLobby()
-            requireView().findNavController().navigateUp()
-        }
-        callback.isEnabled = true
-    }
+    private var hasLeftLobby = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLobbyBinding.inflate(inflater, container, false)
+
+        viewModel.apply {
+            lobbyDestroyed.observe(viewLifecycleOwner) {
+                if (it) {
+                    Toast.makeText(requireContext(), "Lobby closed by host", Toast.LENGTH_LONG)
+                            .show()
+                    hasLeftLobby = true
+                    requireView().findNavController().navigateUp()
+                }
+            }
+        }
 
         return binding.apply {
             lobbyViewModel = viewModel
@@ -46,5 +49,8 @@ class LobbyFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        if (!hasLeftLobby) {
+            viewModel.leaveLobby()
+        }
     }
 }
