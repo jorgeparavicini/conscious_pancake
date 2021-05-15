@@ -2,6 +2,7 @@ package ch.ffhs.conscious_pancake.database
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import ch.ffhs.conscious_pancake.vo.Game
 import ch.ffhs.conscious_pancake.vo.Lobby
 import ch.ffhs.conscious_pancake.vo.Resource
 import ch.ffhs.conscious_pancake.vo.enums.PartyType
@@ -142,6 +143,48 @@ class LobbyDao @Inject constructor() {
         }.addOnFailureListener {
             Timber.e("Could not delete lobby $lobbyId. Exception $it")
             ctx.resume(Resource.error("Could not delete lobby"))
+        }
+    }
+
+    suspend fun startGame(lobbyId: String): Resource<Unit> = suspendCancellableCoroutine { ctx ->
+        if (lobbyId.isEmpty()) {
+            ctx.resume(Resource.error("Please provide a lobby id"))
+            return@suspendCancellableCoroutine
+        }
+        val doc = collection.document(lobbyId)
+        Firebase.firestore.runTransaction { transaction ->
+            val snapshot = transaction.get(doc)
+
+            if (snapshot.getString("gameId") != null) {
+                return@runTransaction "Lobby already has associated game"
+            }
+
+            val game = Game().apply {
+                hostId = snapshot.getString("hostId")!!
+                player2Id =
+                    snapshot.getString("player2Id")
+                        ?: return@runTransaction "Need a second player to start the game"
+            }
+
+            Timber.v("Creating game instance for lobby $lobbyId")
+            val gameDoc = Firebase.firestore.collection("games").document()
+            transaction.set(gameDoc, game)
+
+            Timber.v("Created game ${gameDoc.id}")
+            transaction.update(doc, "gameId", gameDoc.id)
+
+            return@runTransaction null
+        }.addOnSuccessListener {
+            it?.let {
+                Timber.e(it)
+                ctx.resume(Resource.error(it))
+            } ?: run {
+                Timber.i("Successfully assigned game to lobby $lobbyId")
+                ctx.resume(Resource.success())
+            }
+        }.addOnFailureListener {
+            Timber.e("Unable to assign game to lobby $lobbyId. Exception $it")
+            ctx.resume(Resource.error("Unable to initiate game"))
         }
     }
 }

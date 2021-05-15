@@ -51,7 +51,7 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() 
             binding.apply {
                 val user = Firebase.auth.currentUser!!.uid
                 enemyUserName.text =
-                    if (user == item.player1Id) item.player1?.username else item.player2?.username
+                    if (user == item.hostId) item.player1?.username else item.player2?.username
                 if (item.winner == user) {
                     wonLost.setText(R.string.won)
                     wonLost.setTextColor(

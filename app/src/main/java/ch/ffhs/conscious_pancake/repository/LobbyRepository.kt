@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import ch.ffhs.conscious_pancake.database.LobbyDao
 import ch.ffhs.conscious_pancake.repository.cache.CachePolicy
 import ch.ffhs.conscious_pancake.repository.cache.CachePolicyRepository
-import ch.ffhs.conscious_pancake.vo.Game
 import ch.ffhs.conscious_pancake.vo.Lobby
 import ch.ffhs.conscious_pancake.vo.Resource
 import kotlinx.coroutines.Dispatchers
@@ -43,20 +42,26 @@ class LobbyRepository @Inject constructor(private val lobbyDao: LobbyDao) : Cach
             }
         }
 
-    suspend fun createLobby(lobby: Lobby): Resource<Lobby> {
-        return lobbyDao.createLobby(lobby)
+    suspend fun createLobby(lobby: Lobby): Resource<Lobby> = withContext(Dispatchers.IO) {
+        return@withContext lobbyDao.createLobby(lobby)
     }
 
-    suspend fun joinLobby(lobbyId: String, userId: String): Resource<Unit> {
-        return lobbyDao.joinLobby(lobbyId, userId)
+    suspend fun joinLobby(lobbyId: String, userId: String): Resource<Unit> =
+        withContext(Dispatchers.IO) {
+            return@withContext lobbyDao.joinLobby(lobbyId, userId)
+        }
+
+    suspend fun leaveLobby(lobbyId: String, userId: String): Resource<Unit> =
+        withContext(Dispatchers.IO) {
+            return@withContext lobbyDao.leaveLobby(lobbyId, userId)
+        }
+
+    suspend fun deleteLobby(lobbyId: String): Resource<Unit> = withContext(Dispatchers.IO) {
+        return@withContext lobbyDao.deleteLobby(lobbyId)
     }
 
-    suspend fun leaveLobby(lobbyId: String, userId: String): Resource<Unit> {
-        return lobbyDao.leaveLobby(lobbyId, userId)
-    }
-
-    suspend fun deleteLobby(lobbyId: String): Resource<Unit> {
-        return lobbyDao.deleteLobby(lobbyId)
+    suspend fun startGame(lobbyId: String): Resource<Unit> = withContext(Dispatchers.IO) {
+        return@withContext lobbyDao.startGame(lobbyId)
     }
 
     companion object {

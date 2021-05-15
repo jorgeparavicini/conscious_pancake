@@ -65,5 +65,17 @@
         <argument
             android:name="is_host"
             app:argType="boolean" />
+        <action
+            android:id="@+id/action_lobbyFragment_to_gameFragment"
+            app:destination="@id/gameFragment"
+            app:popUpTo="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="ch.ffhs.conscious_pancake.ui.game.GameFragment"
+        android:label="@string/game" >
+        <argument
+            android:name="gameId"
+            app:argType="string" />
     </fragment>
 </navigation>

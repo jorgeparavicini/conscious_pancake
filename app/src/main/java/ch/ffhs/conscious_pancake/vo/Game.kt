@@ -17,11 +17,11 @@ open class Game : BaseModel() {
         }
 
     @get:Bindable
-    var player1Id: String = ""
+    var hostId: String = ""
         set(value) {
             val old = field
             field = value
-            applyChanges(old, value, BR.player1Id)
+            applyChanges(old, value, BR.hostId)
         }
 
     @get:Bindable
@@ -53,7 +53,7 @@ open class Game : BaseModel() {
         set(value) {
             val old = field
             field = value
-            applyChanges(old, value, BR.player1Id)
+            applyChanges(old, value, BR.lastAction)
         }
 
     @get:Bindable
@@ -83,7 +83,7 @@ open class Game : BaseModel() {
             obj.turn = snapshot.getLong("turn")!!.toInt()
             obj.winner = snapshot.getString("winner")
             val players = snapshot.get("players") as List<String>
-            obj.player1Id = players[0]
+            obj.hostId = players[0]
             obj.player2Id = players[1]
             return obj
         }

@@ -49,7 +49,7 @@ class Lobby() : BaseModel() {
         set(value) {
             val old = field
             field = value
-            applyChanges(old, value, BR.player1Id)
+            applyChanges(old, value, BR.hostId)
         }
 
     @get:Bindable
@@ -58,6 +58,14 @@ class Lobby() : BaseModel() {
             val old = field
             field = value
             applyChanges(old, value, BR.player2Id)
+        }
+
+    @get:Bindable
+    var gameId: String? = null
+        set(value) {
+            val old = field
+            field = value
+            applyChanges(old, value, BR.gameId)
         }
 
     var createdAt: Timestamp = Timestamp.now()
@@ -96,6 +104,7 @@ class Lobby() : BaseModel() {
                 hostId = snapshot.getString("hostId")!!
                 player2Id = snapshot.getString("player2Id")
                 createdAt = snapshot.get("createdAt", Timestamp::class.java)!!
+                gameId = snapshot.getString("gameId")
             }
         }
     }

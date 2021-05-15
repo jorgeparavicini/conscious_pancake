@@ -123,7 +123,7 @@ class HistoryViewModel @Inject constructor(
         return@coroutineScope games.map { game ->
             async {
                 game.player1 =
-                    userRepo.getUser(game.player1Id, CachePolicy(CachePolicyType.ALWAYS)).data
+                    userRepo.getUser(game.hostId, CachePolicy(CachePolicyType.ALWAYS)).data
                 game.player2 =
                     userRepo.getUser(game.player2Id, CachePolicy(CachePolicyType.ALWAYS)).data
                 game

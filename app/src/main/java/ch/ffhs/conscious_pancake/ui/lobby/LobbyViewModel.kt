@@ -31,9 +31,13 @@ class LobbyViewModel @Inject constructor(
     val lobbyDestroyed: LiveData<Boolean>
         get() = _lobbyDestroyed
 
-    private var initialized = false
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String>
+        get() = _errorMessage
 
     val lobby = Transformations.switchMap(lobbyRepo.getLiveLobby(lobbyId)) {
+        Timber.i("Updated lobby")
+        Timber.i(it.data?.gameId)
         if (it.status == Status.SUCCESS) {
             it.data?.let { l ->
                 return@switchMap fetchUsersForLobby(l)
@@ -52,6 +56,10 @@ class LobbyViewModel @Inject constructor(
         it?.player2 != null && isHost
     }
 
+    val gameStarted = Transformations.map(lobby) {
+        it?.gameId
+    }
+
     fun leaveLobby() {
         if (isHost) {
             viewModelScope.launch {
@@ -61,6 +69,20 @@ class LobbyViewModel @Inject constructor(
             viewModelScope.launch {
                 lobbyRepo.leaveLobby(lobbyId, Firebase.auth.currentUser!!.uid)
             }
+        }
+    }
+
+    fun startGame() {
+        if (isHost) {
+            viewModelScope.launch {
+                lobbyRepo.startGame(lobbyId).let {
+                    if (it.status == Status.ERROR) {
+                        _errorMessage.value = it.message!!
+                    }
+                }
+            }
+        } else {
+            _errorMessage.value = "Only the host can start the game."
         }
     }
 

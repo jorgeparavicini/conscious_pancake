@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -38,11 +37,25 @@ class LobbyFragment : Fragment() {
                     requireView().findNavController().navigateUp()
                 }
             }
+
+            errorMessage.observe(viewLifecycleOwner) {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            }
+
+            gameStarted.observe(viewLifecycleOwner) {
+                it?.let {
+                    navigateToGame(it)
+                }
+            }
         }
 
         return binding.apply {
             lobbyViewModel = viewModel
             lifecycleOwner = viewLifecycleOwner
+
+            lobbyStart.setOnClickListener {
+                viewModel.startGame()
+            }
         }.root
     }
 
@@ -52,5 +65,11 @@ class LobbyFragment : Fragment() {
         if (!hasLeftLobby) {
             viewModel.leaveLobby()
         }
+    }
+
+    private fun navigateToGame(gameId: String) {
+        Timber.i(" Navigating to game")
+        requireView().findNavController()
+                .navigate(LobbyFragmentDirections.actionLobbyFragmentToGameFragment(gameId))
     }
 }

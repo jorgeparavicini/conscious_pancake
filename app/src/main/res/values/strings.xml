@@ -37,4 +37,5 @@
     <string name="join_game">Join Game</string>
     <string name="open_games">Open Games</string>
     <string name="no_open_games_found">No open Games found</string>
+    <string name="game">Game</string>
 </resources>
