@@ -35,8 +35,8 @@ class GameDao @Inject constructor() : IGameDao {
         val collection = Firebase.firestore.collection("games")
         val request =
             collection.whereArrayContains("players", userId)
-                    .whereEqualTo("game_over", finished)
-                    .orderBy("last_action")
+                    .whereEqualTo("gameOver", finished)
+                    .orderBy("lastAction")
                     .startAfter(lastDocKey)
                     .limit(count)
 

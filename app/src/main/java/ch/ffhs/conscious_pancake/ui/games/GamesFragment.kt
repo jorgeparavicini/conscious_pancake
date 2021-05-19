@@ -7,9 +7,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import ch.ffhs.conscious_pancake.databinding.FragmentGamesBinding
+import ch.ffhs.conscious_pancake.ui.home.HomeFragmentDirections
+import ch.ffhs.conscious_pancake.ui.join.JoinGameFragmentDirections
+import ch.ffhs.conscious_pancake.vo.Game
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,7 +29,9 @@ class GamesFragment : Fragment() {
     ): View {
         _binding = FragmentGamesBinding.inflate(inflater, container, false)
 
-        val adapter = GamesAdaptor()
+        val adapter = GamesAdaptor {
+            navigateToGame(it)
+        }
 
         viewModel.errorMessage.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
@@ -61,5 +67,10 @@ class GamesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun navigateToGame(game: Game) {
+        requireView().findNavController()
+                .navigate(HomeFragmentDirections.actionHomeFragmentToGameFragment(game.id))
     }
 }

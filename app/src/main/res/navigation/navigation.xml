@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_homeFragment_to_hostGameFragment"
             app:destination="@id/hostGameFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
     </fragment>
     <fragment
         android:id="@+id/titleFragment"

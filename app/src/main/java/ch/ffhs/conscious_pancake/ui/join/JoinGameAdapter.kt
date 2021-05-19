@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import ch.ffhs.conscious_pancake.databinding.OpenGamesRowItemBinding
 import ch.ffhs.conscious_pancake.vo.Lobby
 
-class JoinGameAdapter(private val itemClicked: (lobby: Lobby) -> Unit) : RecyclerView.Adapter<JoinGameAdapter.JoinGameViewHolder>() {
+typealias OnItemClickedListener = (lobby: Lobby) -> Unit
+
+class JoinGameAdapter(private val itemClicked: OnItemClickedListener) : RecyclerView.Adapter<JoinGameAdapter.JoinGameViewHolder>() {
 
     private var data = listOf<Lobby>()
 
@@ -38,7 +40,7 @@ class JoinGameAdapter(private val itemClicked: (lobby: Lobby) -> Unit) : Recycle
     }
 
     class JoinGameViewHolder(
-        private val binding: OpenGamesRowItemBinding, private val clicked: (lobby: Lobby) -> Unit
+        private val binding: OpenGamesRowItemBinding, private val clicked: OnItemClickedListener
     ) : RecyclerView.ViewHolder(
         binding.root
     ) {
@@ -55,7 +57,7 @@ class JoinGameAdapter(private val itemClicked: (lobby: Lobby) -> Unit) : Recycle
 
         companion object {
 
-            fun from(parent: ViewGroup, clicked: (lobby: Lobby) -> Unit): JoinGameViewHolder {
+            fun from(parent: ViewGroup, clicked: OnItemClickedListener): JoinGameViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = OpenGamesRowItemBinding.inflate(layoutInflater, parent, false)
                 return JoinGameViewHolder(binding, clicked)

@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import ch.ffhs.conscious_pancake.databinding.LobbyRowItemBinding
 import ch.ffhs.conscious_pancake.vo.Game
 
-class GamesAdaptor : RecyclerView.Adapter<GamesAdaptor.LobbyViewHolder>() {
+typealias OnGameClickedListener = (game: Game) -> Unit
+
+class GamesAdaptor(private val itemClicked: OnGameClickedListener) : RecyclerView.Adapter<GamesAdaptor.LobbyViewHolder>() {
 
     private var data = listOf<Game>()
 
@@ -18,11 +20,10 @@ class GamesAdaptor : RecyclerView.Adapter<GamesAdaptor.LobbyViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LobbyViewHolder {
-        return LobbyViewHolder.from(parent)
+        return LobbyViewHolder.from(parent, itemClicked)
     }
 
     fun setData(value: List<Game>, updateRange: IntRange?) {
-        // TODO: This needs some serious rework
         val old = data
         data = value
         when {
@@ -39,7 +40,10 @@ class GamesAdaptor : RecyclerView.Adapter<GamesAdaptor.LobbyViewHolder>() {
     }
 
 
-    class LobbyViewHolder(private val binding: LobbyRowItemBinding) : RecyclerView.ViewHolder(
+    class LobbyViewHolder(
+        private val binding: LobbyRowItemBinding,
+        private val clicked: OnGameClickedListener
+    ) : RecyclerView.ViewHolder(
         binding.root
     ) {
 
@@ -47,15 +51,16 @@ class GamesAdaptor : RecyclerView.Adapter<GamesAdaptor.LobbyViewHolder>() {
             binding.apply {
                 player1Name.text = item.player1?.username
                 player2Name.text = item.player2?.username
+                playGameButton.setOnClickListener { clicked(item) }
             }
         }
 
         companion object {
 
-            fun from(parent: ViewGroup): LobbyViewHolder {
+            fun from(parent: ViewGroup, clicked: OnGameClickedListener): LobbyViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = LobbyRowItemBinding.inflate(layoutInflater, parent, false)
-                return LobbyViewHolder(binding)
+                return LobbyViewHolder(binding, clicked)
             }
         }
     }
