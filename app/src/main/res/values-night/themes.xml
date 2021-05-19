@@ -1,21 +1,9 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
-    <style name="Theme.ConsciousPancake" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/grey_800</item>
-        <item name="colorPrimaryVariant">@color/black</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/orange_500</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-        <item name="colorAccent">@color/orange_500</item>
-        <item name="colorOnBackground">@color/white</item>
+    <style name="Theme.ConsciousPancake" parent="Theme.MaterialComponents.DayNight.NoActionBar">
     </style>
 
-    <style name="Theme.ConsciousPancake.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar" />
+    <style name="Theme.ConsciousPancake.ActionBar" parent="ThemeOverlay.MaterialComponents.ActionBar">
+    </style>
 
 </resources>
