@@ -24,7 +24,7 @@ class LobbyViewModel @Inject constructor(
     private val lobbyId: String
         get() = savedStateHandle.get<String>(LOBBY_ID_ARG_NAME)!!
 
-    private val isHost: Boolean
+    val isHost: Boolean
         get() = savedStateHandle.get<Boolean>(IS_HOST_ARG_NAME)!!
 
     private val _lobbyDestroyed = MutableLiveData(false)

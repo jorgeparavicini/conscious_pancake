@@ -3,8 +3,9 @@ package ch.ffhs.conscious_pancake.draughts.model.core
 import ch.ffhs.conscious_pancake.draughts.model.enums.MoveType
 import ch.ffhs.conscious_pancake.draughts.model.enums.PieceType
 import ch.ffhs.conscious_pancake.draughts.model.exceptions.IllegalMoveException
+import timber.log.Timber
 
-typealias OnPieceMovedListener = (Vector2, Vector2) -> Unit
+typealias OnPieceMovedListener = (Move) -> Unit
 typealias OnPieceEatenListener = (Vector2) -> Unit
 typealias OnPiecePromotedListener = (Vector2) -> Unit
 typealias OnGameOverListener = (PieceType) -> Unit
@@ -16,12 +17,6 @@ class Field(val size: Int = 8) {
 
     val isGameOver: Boolean
         get() = winner != null
-
-    var turn: Int = 0
-        private set
-
-    val currentTurnsPlayer: PieceType
-        get() = if (turn % 2 == 0) PieceType.BLACK else PieceType.WHITE
 
     private val cells: List<List<Cell>> = List(size) { row ->
         List(size) { column ->
@@ -44,11 +39,11 @@ class Field(val size: Int = 8) {
     }
 
     fun reset() {
-        turn = 0
         clearField()
         resetWhitePieces()
         resetBlackPieces()
         onGameResetListener?.invoke()
+        Timber.v("Field reset")
     }
 
     private fun clearField() {
@@ -76,7 +71,7 @@ class Field(val size: Int = 8) {
     }
 
     fun executeMove(move: Move): Boolean {
-        if (move !in getPossibleMoves()) throw IllegalMoveException("Move is not allowed")
+        if (move !in getPossibleMoves(move.player)) throw IllegalMoveException("Move is not allowed")
         val pointsBetween = (move.from..move.to).drop(1).dropLast(1)
         val eaten = pointsBetween.any {
             val cell = getCell(it)
@@ -90,10 +85,11 @@ class Field(val size: Int = 8) {
         val piece = getCell(move.from)!!.piece!!
         getCell(move.from)!!.clear()
         getCell(move.to)!!.setPiece(piece)
+
+        Timber.v("Moved $piece from ${move.from} to ${move.to}")
         updateDraught(getCell(move.to)!!)
-        onPieceMovedListener?.invoke(move.from, move.to)
+        onPieceMovedListener?.invoke(move)
         updateGameOver()
-        turn += 1
         return eaten
     }
 
@@ -106,7 +102,7 @@ class Field(val size: Int = 8) {
         ) {
             cell.piece!!.isDraught = true
             onPiecePromotedListener?.invoke(cell.position)
-
+            Timber.v("Piece at ${cell.position} promoted")
         }
     }
 
@@ -114,19 +110,22 @@ class Field(val size: Int = 8) {
         if (getCellsWithPieces(PieceType.BLACK).count() == 0) {
             winner = PieceType.BLACK
             onGameOverListener?.invoke(winner!!)
+            Timber.v("Black won")
         } else if (getCellsWithPieces(PieceType.WHITE).count() == 0) {
             winner = PieceType.WHITE
             onGameOverListener?.invoke(winner!!)
+            Timber.v("White won")
         }
     }
 
     private fun eatPiece(position: Vector2) {
         getCell(position)?.clear()
         onPieceEatenListener?.invoke(position)
+        Timber.v("Piece eaten at $position")
     }
 
-    fun getPossibleMoves(): List<Move> {
-        val cells = getCellsWithPieces(currentTurnsPlayer)
+    fun getPossibleMoves(pieceType: PieceType): List<Move> {
+        val cells = getCellsWithPieces(pieceType)
         var moves = cells.map { getPossibleMoves(it) }.flatten()
 
         if (moves.any { move -> move.second == MoveType.VALID_EAT }) {
@@ -181,7 +180,7 @@ class Field(val size: Int = 8) {
         return cells[position.y][position.x]
     }
 
-    private fun getCellsWithPieces(pieceType: PieceType): List<Cell> {
+    fun getCellsWithPieces(pieceType: PieceType): List<Cell> {
         return cells.flatten().filter { it.piece?.type == pieceType }
     }
 

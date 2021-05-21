@@ -3,6 +3,7 @@ package ch.ffhs.conscious_pancake.draughts.model.core
 import ch.ffhs.conscious_pancake.draughts.controllers.Controller
 import ch.ffhs.conscious_pancake.draughts.model.enums.PieceType
 import ch.ffhs.conscious_pancake.draughts.model.exceptions.IllegalMoveException
+import timber.log.Timber
 
 class Draughts(
     private val blackController: Controller,
@@ -17,11 +18,23 @@ class Draughts(
     val isGameOver: Boolean
         get() = this.field.isGameOver
 
-    val turn: Int
-        get() = this.field.turn
+    var hasStarted: Boolean = false
+        private set
+
+    var turn: Int = 0
+        private set
 
     val currentTurnsPlayer: PieceType
-        get() = this.field.currentTurnsPlayer
+        get() = if (turn % 2 == 0) PieceType.BLACK else PieceType.WHITE
+
+    val blackPieces: List<Vector2>
+        get() = this.field.getCellsWithPieces(PieceType.BLACK).map { it.position }
+
+    val whitePieces: List<Vector2>
+        get() = this.field.getCellsWithPieces(PieceType.WHITE).map { it.position }
+
+    val currentController: Controller
+        get() = if (currentTurnsPlayer == PieceType.BLACK) blackController else whiteController
 
     var onPieceMovedListener: OnPieceMovedListener?
         get() = this.field.onPieceMovedListener
@@ -54,15 +67,20 @@ class Draughts(
         }
 
     fun reset() {
+        turn = 0
         field.reset()
+        hasStarted = false
+    }
+
+    fun startGame() {
+        if (hasStarted) throw IllegalStateException("Game already started")
+        hasStarted = true
     }
 
     suspend fun nextTurn() {
         if (isGameOver) throw IllegalStateException("Game is already over")
-        val controller =
-            if (field.currentTurnsPlayer == PieceType.BLACK) blackController else whiteController
-
-        playTurn(controller)
+        playTurn(currentController)
+        turn += 1
     }
 
     private suspend fun playTurn(controller: Controller) {
@@ -70,10 +88,11 @@ class Draughts(
 
         while (true) {
             if (isGameOver) break
-            val move = controller.getMove(field.currentTurnsPlayer)
+            val move = controller.getMove(currentTurnsPlayer)
             try {
                 if (!field.executeMove(move)) break
             } catch (e: IllegalMoveException) {
+                Timber.v("Move was not allowed: $move")
                 controller.illegalMove(move, e.message)
             }
         }

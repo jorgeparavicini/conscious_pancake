@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="gridColor" format="reference|color" />
+    <attr name="blackPieceFillColor" format="reference|color" />
+    <attr name="blackPieceStrokeColor" format="reference|color" />
+    <attr name="whitePieceFillColor" format="reference|color" />
+    <attr name="whitePieceStrokeColor" format="reference|color" />
+</resources>

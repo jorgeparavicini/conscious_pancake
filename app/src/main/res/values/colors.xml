@@ -13,4 +13,7 @@
     <color name="purple_200">#BB86FC</color>
     <color name="purple_700">#3700B3</color>
     <color name="dark_surface">#121212</color>
+    <color name="salmon">#F4796B</color>
+    <color name="black_200">#090809</color>
+    <color name="grey_600">#383838</color>
 </resources>

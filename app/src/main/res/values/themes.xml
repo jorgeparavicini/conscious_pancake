@@ -1,6 +1,11 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.ConsciousPancake" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="gridColor">@color/black_200</item>
+        <item name="whitePieceFillColor">@color/salmon</item>
+        <item name="whitePieceStrokeColor">@color/salmon</item>
+        <item name="blackPieceFillColor">@color/black_200</item>
+        <item name="blackPieceStrokeColor">@color/black_200</item>
     </style>
 
     <style name="Theme.ConsciousPancake.ActionBar" parent="ThemeOverlay.MaterialComponents.ActionBar" />

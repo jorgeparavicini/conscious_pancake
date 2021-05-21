@@ -14,6 +14,8 @@ import ch.ffhs.conscious_pancake.databinding.FragmentGamesBinding
 import ch.ffhs.conscious_pancake.ui.home.HomeFragmentDirections
 import ch.ffhs.conscious_pancake.ui.join.JoinGameFragmentDirections
 import ch.ffhs.conscious_pancake.vo.Game
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -71,6 +73,6 @@ class GamesFragment : Fragment() {
 
     private fun navigateToGame(game: Game) {
         requireView().findNavController()
-                .navigate(HomeFragmentDirections.actionHomeFragmentToGameFragment(game.id))
+                .navigate(HomeFragmentDirections.actionHomeFragmentToGameFragment(game.id, game.hostId == Firebase.auth.currentUser!! .uid))
     }
 }

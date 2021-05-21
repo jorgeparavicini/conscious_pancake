@@ -70,6 +70,11 @@ class LobbyFragment : Fragment() {
     private fun navigateToGame(gameId: String) {
         Timber.i(" Navigating to game")
         requireView().findNavController()
-                .navigate(LobbyFragmentDirections.actionLobbyFragmentToGameFragment(gameId))
+                .navigate(
+                    LobbyFragmentDirections.actionLobbyFragmentToGameFragment(
+                        gameId,
+                        viewModel.isHost
+                    )
+                )
     }
 }
