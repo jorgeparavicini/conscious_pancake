@@ -1,16 +1,13 @@
 package ch.ffhs.conscious_pancake.ui.game
 
 import androidx.lifecycle.*
-import ch.ffhs.conscious_pancake.draughts.controllers.Controller
-import ch.ffhs.conscious_pancake.draughts.model.core.*
-import ch.ffhs.conscious_pancake.draughts.model.enums.PieceType
-import ch.ffhs.conscious_pancake.vo.Game
+import com.jorgeparavicini.draughts.model.core.Draughts
+import com.jorgeparavicini.draughts.model.core.GameOverHandler
+import com.jorgeparavicini.draughts.model.core.GameResetHandler
+import com.jorgeparavicini.draughts.model.core.Vector2
+import com.jorgeparavicini.draughts.model.enums.Player
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,48 +26,6 @@ class GameViewModel @Inject constructor(savedStateHandle: SavedStateHandle) : Vi
     val turnLabel: LiveData<String>
         get() = _turnLabel
 
-    var onBlackCellSelectionChangedListener: OnCellSelectionChangedListener?
-        get() = (hostController as? PlayerController)?.onCellSelectionChangedListener
-        set(value) {
-            (hostController as? PlayerController)?.onCellSelectionChangedListener = value
-        }
-
-    var onWhiteCellSelectionChangedListener: OnCellSelectionChangedListener?
-        get() = (player2Controller as? PlayerController)?.onCellSelectionChangedListener
-        set(value) {
-            (player2Controller as? PlayerController)?.onCellSelectionChangedListener = value
-        }
-
-    var onPieceMovedListener: OnPieceMovedListener?
-        get() = draughts.onPieceMovedListener
-        set(value) {
-            draughts.onPieceMovedListener = value
-        }
-
-    var onPieceEatenListener: OnPieceEatenListener?
-        get() = draughts.onPieceEatenListener
-        set(value) {
-            draughts.onPieceEatenListener = value
-        }
-
-    var onPiecePromotedListener: OnPiecePromotedListener?
-        get() = draughts.onPiecePromotedListener
-        set(value) {
-            draughts.onPiecePromotedListener = value
-        }
-
-    var onGameOverListener: OnGameOverListener?
-        get() = draughts.onGameOverListener
-        set(value) {
-            draughts.onGameOverListener = value
-        }
-
-    var onGameResetListener: OnGameResetListener?
-        get() = draughts.onGameResetListener
-        set(value) {
-            draughts.onGameResetListener = value
-        }
-
     init {
         viewModelScope.launch {
             draughts.startGame()
@@ -79,18 +34,34 @@ class GameViewModel @Inject constructor(savedStateHandle: SavedStateHandle) : Vi
                 draughts.nextTurn()
             }
         }
+
+        draughts.field.setOnGameOverHandler {
+            _turnLabel.value = if (it == Player.BLACK) "Black Won" else "White Won"
+        }
     }
 
     fun onCellClicked(pos: Vector2) {
         // Only propagate click event if the current controller is actually a player controller
-        Timber.v("Cell $pos clicked")
         val controller = draughts.currentController as? PlayerController ?: return
+        val piece = draughts.field.getPiece(pos)
+        if (piece != null && !piece.eaten) {
+            controller.onPieceClicked(piece)
+        } else {
+            controller.onCellClicked(pos)
+        }
+    }
 
-        controller.onCellClicked(pos)
+    fun setOnPieceSelectionChangedHandler(handler: PieceSelectionChangedHandler) {
+        (hostController as? PlayerController)?.onPieceSelectionChanged = handler
+        (player2Controller as? PlayerController)?.onPieceSelectionChanged = handler
+    }
+
+    fun setOnGameResetHandler(handler: GameResetHandler) {
+        draughts.field.setOnGameResetHandler(handler)
     }
 
     private fun updateTurnLabel() {
-        if (isHost && draughts.currentTurnsPlayer == PieceType.BLACK) {
+        if (isHost && draughts.currentPlayer == Player.BLACK) {
             _turnLabel.value = "Your turn"
         } else {
             _turnLabel.value = "Enemies turn"

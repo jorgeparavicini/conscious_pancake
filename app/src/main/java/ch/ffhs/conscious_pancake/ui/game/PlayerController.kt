@@ -1,37 +1,60 @@
 package ch.ffhs.conscious_pancake.ui.game
 
-import ch.ffhs.conscious_pancake.draughts.controllers.Controller
-import ch.ffhs.conscious_pancake.draughts.model.core.Move
-import ch.ffhs.conscious_pancake.draughts.model.core.Vector2
-import ch.ffhs.conscious_pancake.draughts.model.enums.PieceType
+import com.jorgeparavicini.draughts.controllers.Controller
+import com.jorgeparavicini.draughts.model.core.Move
+import com.jorgeparavicini.draughts.model.core.Piece
+import com.jorgeparavicini.draughts.model.core.Vector2
 import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
 import kotlin.coroutines.resume
 
-typealias OnMoveListener = (Move) -> Unit
-typealias OnCellSelectionChangedListener = (Vector2, Boolean) -> Unit
+typealias PieceSelectionChangedHandler = (Piece, Boolean) -> Unit
+private typealias MoveHandler = (Move) -> Unit
 
 
 class PlayerController : Controller() {
 
-    var onCellSelectionChangedListener: OnCellSelectionChangedListener? = null
+    var onPieceSelectionChanged: PieceSelectionChangedHandler? = null
 
-    private var onMoveListener: OnMoveListener? = null
+    private var moveHandler: MoveHandler? = null
     private val isWaitingForMove
-        get() = onMoveListener != null
+        get() = moveHandler != null
 
-    private var from: Vector2? = null
+    private var selectedPiece: Piece? = null
 
-    private var to: Vector2? = null
-
-    private var player: PieceType? = null
-
-    override suspend fun getMove(player: PieceType): Move = suspendCancellableCoroutine { ctx ->
+    override suspend fun getMove(): Move = suspendCancellableCoroutine { ctx ->
         this.player = player
-        onMoveListener = { move ->
+        moveHandler = { move ->
             Timber.v("Trying to execute move $move")
             resetSelections()
             ctx.resume(move)
+        }
+    }
+
+    fun onPieceClicked(piece: Piece) {
+        if (!isWaitingForMove) {
+            Timber.w("Unrecognized click received")
+            return
+        }
+
+        when {
+            piece.player != player -> {
+                Timber.e("Can not select enemy piece")
+            }
+            selectedPiece == piece -> {
+                selectedPiece = null
+                onPieceSelectionChanged?.invoke(piece, false)
+            }
+            selectedPiece == null -> {
+                selectedPiece = piece
+                onPieceSelectionChanged?.invoke(piece, true)
+            }
+            else -> {
+                val old = selectedPiece!!
+                selectedPiece = piece
+                onPieceSelectionChanged?.invoke(old, false)
+                onPieceSelectionChanged?.invoke(piece, true)
+            }
         }
     }
 
@@ -40,28 +63,14 @@ class PlayerController : Controller() {
             Timber.w("Unrecognized click received")
             return
         }
-        when {
-            from == null -> {
-                from = pos
-                Timber.v("Selected from position: $from")
-                onCellSelectionChangedListener?.invoke(from!!, true)
-            }
-            to == null -> {
-                to = pos
-                Timber.v("Selected to position: $from")
-                onMoveListener!!.invoke(Move(from!!, to!!, player!!))
-            }
-            else -> {
-                throw IllegalStateException("Move should have already been executed, but wasn't")
-            }
-        }
+
+        if (selectedPiece == null) return
+        moveHandler?.invoke(Move(selectedPiece!!, pos))
     }
 
     private fun resetSelections() {
-        onCellSelectionChangedListener?.invoke(from!!, false)
-        onMoveListener = null
-        from = null
-        to = null
-        player = null
+        onPieceSelectionChanged?.invoke(selectedPiece!!, false)
+        moveHandler = null
+        selectedPiece = null
     }
 }

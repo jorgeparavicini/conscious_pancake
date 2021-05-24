@@ -5,4 +5,7 @@
     <attr name="blackPieceStrokeColor" format="reference|color" />
     <attr name="whitePieceFillColor" format="reference|color" />
     <attr name="whitePieceStrokeColor" format="reference|color" />
+    <attr name="possibleMoveCellColor" format="reference|color" />
+    <attr name="whiteDraughtsColor" format="reference|color" />
+    <attr name="blackDraughtsColor" format="reference|color" />
 </resources>
