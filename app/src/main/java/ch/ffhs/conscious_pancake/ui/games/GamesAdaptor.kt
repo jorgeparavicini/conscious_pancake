@@ -51,6 +51,7 @@ class GamesAdaptor(private val itemClicked: OnGameClickedListener) : RecyclerVie
             binding.apply {
                 player1Name.text = item.player1?.username
                 player2Name.text = item.player2?.username
+                gameTurnLabel.text = item.remoteMoves.count().toString()
                 playGameButton.setOnClickListener { clicked(item) }
             }
         }

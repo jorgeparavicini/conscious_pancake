@@ -39,4 +39,6 @@
     <string name="no_open_games_found">No open Games found</string>
     <string name="game">Game</string>
     <string name="play">Play</string>
+    <string name="player_label">You are playing %s</string>
+    <string name="winner_label">%s won!</string>
 </resources>

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import ch.ffhs.conscious_pancake.R
 import ch.ffhs.conscious_pancake.databinding.FragmentGameBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,6 +41,10 @@ class GameFragment : Fragment() {
                 if (!binding.gameView.initialized) {
                     binding.gameView.draughts = draughts!!
                 }
+            }
+
+            playerLabel.observe(viewLifecycleOwner) {
+                binding.playerLabel.text = getString(R.string.player_label, it)
             }
         }
 

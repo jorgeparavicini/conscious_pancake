@@ -54,8 +54,6 @@ class PieceAnimator(val piece: Piece) {
             val target = if (selected) 1f else 0f
             val durationLeft =
                 max(0f, if (selected) 1f - selectionOpacity else selectionOpacity)
-            Timber.v("Target: $target")
-            Timber.v("Duration Left: $durationLeft")
             selectionOpacityAnimation =
                 FloatAnimation(
                     selectionOpacity,

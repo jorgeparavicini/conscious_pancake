@@ -53,8 +53,12 @@ class GameDao @Inject constructor() : IGameDao {
     suspend fun addMoveToGame(gameId: String, move: RemoteMove): Resource<Unit> =
         suspendCancellableCoroutine { ctx ->
             val doc = collection.document(gameId)
+            doc.update("remoteMoves", FieldValue.arrayUnion(move))
             Firebase.firestore.runTransaction { transaction ->
-                transaction.update(doc, "remoteMoves", (FieldValue.arrayUnion(move)))
+                val snapshot = transaction.get(doc)
+                val game = Game.fromFirebase(snapshot)
+                game.remoteMoves.add(move)
+                transaction.set(doc, game)
             }.addOnSuccessListener {
                 Timber.d("Successfully added move $move to game.")
                 ctx.resume(Resource.success())

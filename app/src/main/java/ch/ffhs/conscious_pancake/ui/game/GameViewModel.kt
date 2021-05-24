@@ -32,26 +32,15 @@ class GameViewModel @Inject constructor(
 
     private var gameResetHandler: GameResetHandler? = null
 
-    val localPlayer = if (isHost) Player.BLACK else Player.WHITE
+    private val localPlayer = if (isHost) Player.BLACK else Player.WHITE
 
-    var draughts: Draughts? = null
-        private set(value) {
-            if (field != null) {
-                Timber.e("Game already set")
-                return
-            }
-            field = value!!
-            viewModelScope.launch {
-                value.startGame()
-                while (!value.isGameOver) {
-                    updateTurnLabel()
-                    value.nextTurn()
-                }
-            }
-            value.field.setOnGameOverHandler {
-                _turnLabel.value = if (it == Player.BLACK) "Black Won" else "White Won"
-            }
-        }
+    private val _playerLabel = if (localPlayer == Player.BLACK) "Black" else "White"
+    val playerLabel: LiveData<String> =
+        MutableLiveData(_playerLabel)
+
+    private lateinit var _draughts: Draughts
+    val draughts: Draughts
+        get() = _draughts
 
     val game = Transformations.map(gameRepo.getLiveGame(gameId)) {
         if (it.status == Status.ERROR) {
@@ -59,33 +48,23 @@ class GameViewModel @Inject constructor(
             return@map null
         }
 
-        if (draughts == null) {
-            draughts =
+        val game = it.data!!
+
+        if (!this::_draughts.isInitialized) {
+            _draughts =
                 Draughts(
                     hostController,
                     player2Controller,
-                    it.data!!.gameSize.fieldSize
+                    game.gameSize.fieldSize
                 )
 
-            it.data.remoteMoves.forEach { remoteMove ->
-                val piece = draughts!!.field.getPiece(remoteMove.from)!!
-                draughts!!.nextMove(Move(piece, remoteMove.to))
-            }
-
-            gameResetHandler?.let { handler -> draughts!!.field.setOnGameResetHandler(handler) }
-            draughts!!.setOnMoveExecutedHandler { from, to, player ->
-                onMoveExecuted(
-                    from,
-                    to,
-                    player
-                )
-            }
-            return@map it.data
+            initializeGame(game)
+            startGame()
+        } else {
+            onGameUpdated(game)
         }
 
-        onGameUpdated(it.data!!)
-
-        it.data
+        return@map game
     }
 
     private val _turnLabel = MutableLiveData<String>()
@@ -96,10 +75,30 @@ class GameViewModel @Inject constructor(
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
+    private fun initializeGame(game: Game) {
+        game.remoteMoves.forEach { remoteMove ->
+            val piece = draughts.field.getPiece(remoteMove.from)!!
+            draughts.nextMove(Move(piece, remoteMove.to))
+        }
+
+        gameResetHandler?.let { handler -> draughts.field.setOnGameResetHandler(handler) }
+        draughts.setOnMoveExecutedHandler { from, to, player -> onMoveExecuted(from, to, player) }
+        draughts.field.setOnGameOverHandler { onGameOverHandler(it) }
+    }
+
+    private fun startGame() {
+        viewModelScope.launch {
+            while (!draughts.isGameOver) {
+                updateTurnLabel()
+                draughts.nextTurn()
+            }
+        }
+    }
+
     fun onCellClicked(pos: Vector2) {
         // Only propagate click event if the current controller is actually a player controller
-        val controller = draughts?.currentController as? PlayerController ?: return
-        val piece = draughts?.field?.getPiece(pos)
+        val controller = draughts.currentController as? PlayerController ?: return
+        val piece = draughts.field.getPiece(pos)
         if (piece != null && !piece.eaten) {
             controller.onPieceClicked(piece)
         } else {
@@ -108,12 +107,12 @@ class GameViewModel @Inject constructor(
     }
 
     private fun onGameUpdated(newGame: Game) {
-        val remoteController = draughts?.currentController as? RemoteController ?: return
+        val remoteController = draughts.currentController as? RemoteController ?: return
         val lastMove = game.value?.remoteMoves?.lastOrNull()
         val newMove = newGame.remoteMoves.lastOrNull()
         if (lastMove != newMove && newMove != null) {
             if (newMove.player == localPlayer) return
-            val piece = draughts!!.field.getPiece(newMove.from)!!
+            val piece = draughts.field.getPiece(newMove.from)!!
             remoteController.onMoveExecuted(Move(piece, newMove.to))
         }
     }
@@ -124,15 +123,14 @@ class GameViewModel @Inject constructor(
     }
 
     fun setOnGameResetHandler(handler: GameResetHandler) {
-        if (draughts == null) {
+        if (!this::_draughts.isInitialized) {
             gameResetHandler = handler
         } else {
-            draughts!!.field.setOnGameResetHandler(handler)
+            draughts.field.setOnGameResetHandler(handler)
         }
     }
 
     private fun onMoveExecuted(from: Vector2, to: Vector2, player: Player) {
-        val localPlayer = if (isHost) Player.BLACK else Player.WHITE
         if (player != localPlayer) return
         viewModelScope.launch {
             gameRepo.addMoveToGame(gameId, RemoteMove(from, to, player))
@@ -140,12 +138,16 @@ class GameViewModel @Inject constructor(
     }
 
     private fun updateTurnLabel() {
-        if (isHost && draughts!!.currentPlayer == Player.BLACK ||
-                !isHost && draughts!!.currentPlayer == Player.WHITE
+        if (isHost && draughts.currentPlayer == Player.BLACK ||
+                !isHost && draughts.currentPlayer == Player.WHITE
         ) {
             _turnLabel.value = "Your turn"
         } else {
             _turnLabel.value = "Enemies turn"
         }
+    }
+
+    private fun onGameOverHandler(winner: Player) {
+        _turnLabel.value = if (winner == Player.BLACK) "Black Won" else "White Won"
     }
 }

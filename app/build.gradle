@@ -92,7 +92,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // Game
-    implementation 'com.jorgeparavicini:draughts:1.0.10'
+    implementation 'com.jorgeparavicini:draughts:1.0.11'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

@@ -61,13 +61,14 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/lobby_score"
+        android:id="@+id/game_turn_label"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.2"
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         android:scrollHorizontally="true" />
 
     <Button
