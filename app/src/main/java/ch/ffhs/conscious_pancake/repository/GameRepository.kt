@@ -1,11 +1,14 @@
 package ch.ffhs.conscious_pancake.repository
 
+import androidx.lifecycle.LiveData
 import ch.ffhs.conscious_pancake.database.GameDao
 import ch.ffhs.conscious_pancake.repository.cache.CachePolicy
 import ch.ffhs.conscious_pancake.repository.cache.CachePolicyRepository
 import ch.ffhs.conscious_pancake.repository.contracts.IGameRepository
 import ch.ffhs.conscious_pancake.vo.Game
+import ch.ffhs.conscious_pancake.vo.RemoteMove
 import ch.ffhs.conscious_pancake.vo.Resource
+import com.jorgeparavicini.draughts.model.core.Move
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -41,4 +44,13 @@ class GameRepository @Inject constructor(
             }
         }
     }
+
+    fun getLiveGame(gameId: String): LiveData<Resource<Game?>> {
+        return gameDao.getLiveGame(gameId)
+    }
+
+    suspend fun addMoveToGame(gameId: String, move: RemoteMove): Resource<Unit> =
+        withContext(Dispatchers.IO) {
+            return@withContext gameDao.addMoveToGame(gameId, move)
+        }
 }

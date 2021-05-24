@@ -32,6 +32,9 @@ class DraughtsView(context: Context, attrs: AttributeSet) : View(context, attrs)
             invalidate()
         }
 
+    val initialized: Boolean
+        get() = _draughts != null
+
     private var animators: List<PieceAnimator> = emptyList()
 
     private var cellClickedHandler: CellClickedHandler? = null
@@ -199,7 +202,7 @@ class DraughtsView(context: Context, attrs: AttributeSet) : View(context, attrs)
                 center.y + animator.size * pieceRadius
             )
         val borderPaint =
-            if (animator.piece.player == Player.BLACK) blackDraughtsCrownPaint else whiteDraughtsCrownPaint
+            if (animator.piece.player == Player.BLACK) blackDraughtsStrokePaint else whiteDraughtsStrokePaint
 
         drawArc(
             rect,

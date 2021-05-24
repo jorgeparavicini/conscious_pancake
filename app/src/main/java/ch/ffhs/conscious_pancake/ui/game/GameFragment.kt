@@ -34,10 +34,16 @@ class GameFragment : Fragment() {
             turnLabel.observe(viewLifecycleOwner) {
                 binding.turnLabel.text = it
             }
+
+            game.observe(viewLifecycleOwner) { game ->
+                if (game == null) return@observe
+                if (!binding.gameView.initialized) {
+                    binding.gameView.draughts = draughts!!
+                }
+            }
         }
 
         return binding.apply {
-            gameView.draughts = viewModel.draughts
             gameView.setOnCellClickedListener { viewModel.onCellClicked(it) }
         }.root
     }

@@ -9,7 +9,7 @@ import timber.log.Timber
 import kotlin.coroutines.resume
 
 typealias PieceSelectionChangedHandler = (Piece, Boolean) -> Unit
-private typealias MoveHandler = (Move) -> Unit
+typealias MoveHandler = (Move) -> Unit
 
 
 class PlayerController : Controller() {
@@ -23,7 +23,6 @@ class PlayerController : Controller() {
     private var selectedPiece: Piece? = null
 
     override suspend fun getMove(): Move = suspendCancellableCoroutine { ctx ->
-        this.player = player
         moveHandler = { move ->
             Timber.v("Trying to execute move $move")
             resetSelections()

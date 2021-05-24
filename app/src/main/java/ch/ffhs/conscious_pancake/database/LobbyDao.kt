@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import ch.ffhs.conscious_pancake.vo.Game
 import ch.ffhs.conscious_pancake.vo.Lobby
 import ch.ffhs.conscious_pancake.vo.Resource
+import ch.ffhs.conscious_pancake.vo.enums.GameSize
 import ch.ffhs.conscious_pancake.vo.enums.PartyType
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
@@ -164,6 +165,7 @@ class LobbyDao @Inject constructor() {
                 player2Id =
                     snapshot.getString("player2Id")
                         ?: return@runTransaction "Need a second player to start the game"
+                gameSize = GameSize.valueOf(snapshot.getString("gameSize")!!)
             }
 
             Timber.v("Creating game instance for lobby $lobbyId")

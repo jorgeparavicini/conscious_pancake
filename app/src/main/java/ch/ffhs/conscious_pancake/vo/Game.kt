@@ -2,9 +2,12 @@ package ch.ffhs.conscious_pancake.vo
 
 import androidx.databinding.Bindable
 import ch.ffhs.conscious_pancake.BR
+import ch.ffhs.conscious_pancake.vo.enums.GameSize
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.jorgeparavicini.draughts.model.core.Move
 
 open class Game : BaseModel() {
 
@@ -36,14 +39,6 @@ open class Game : BaseModel() {
         }
 
     @get:Bindable
-    var turn: Int = 0
-        set(value) {
-            val old = field
-            field = value
-            applyChanges(old, value, BR.turn)
-        }
-
-    @get:Bindable
     var winner: String? = null
         set(value) {
             val old = field
@@ -58,6 +53,17 @@ open class Game : BaseModel() {
             field = value
             applyChanges(old, value, BR.lastAction)
         }
+
+    @get:Bindable
+    var gameSize: GameSize = GameSize.SIZE_8X8
+        set(value) {
+            val old = field
+            field = value
+            applyChanges(old, value, BR.gameSize)
+        }
+
+    var remoteMoves: MutableList<RemoteMove> = mutableListOf()
+        private set
 
     @get:Bindable
     @get:Exclude
@@ -86,16 +92,23 @@ open class Game : BaseModel() {
 
     companion object {
         @Suppress("UNCHECKED_CAST")
-        fun fromFirebase(snapshot: QueryDocumentSnapshot): Game {
-            val obj = Game()
-            obj.id = snapshot.id
-            obj.lastAction = snapshot.getTimestamp("lastAction")!!
-            obj.turn = snapshot.getLong("turn")!!.toInt()
-            obj.winner = snapshot.getString("winner")
-            val players = snapshot.get("players") as List<String>
-            obj.hostId = players[0]
-            obj.player2Id = players[1]
-            return obj
+        fun fromFirebase(snapshot: DocumentSnapshot): Game {
+            return Game().apply {
+                id = snapshot.id
+                lastAction = snapshot.getTimestamp("lastAction")!!
+                winner = snapshot.getString("winner")
+                val players = snapshot.get("players") as List<String>
+                hostId = players[0]
+                player2Id = players[1]
+                remoteMoves =
+                    (snapshot.get("remoteMoves") as List<HashMap<String, Any>>).map { hashMap ->
+                        RemoteMove.from(hashMap)
+                    }.toMutableList()
+            }
         }
     }
 }
+
+/*private fun Move.Companion.fromFirebase(snapshot: DocumentSnapshot): Move {
+
+}*/
