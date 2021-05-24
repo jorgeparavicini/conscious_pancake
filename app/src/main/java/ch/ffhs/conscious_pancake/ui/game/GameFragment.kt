@@ -24,25 +24,13 @@ class GameFragment : Fragment() {
         _binding = FragmentGameBinding.inflate(inflater, container, false)
 
         viewModel.apply {
-            onBlackCellSelectionChangedListener = { pos, selected ->
-                binding.gameView.onCellSelectionChanged(pos, selected)
+            setOnPieceSelectionChangedHandler { piece, selected ->
+                binding.gameView.onPieceSelectionChanged(piece, selected)
             }
-            onWhiteCellSelectionChangedListener = { pos, selected ->
-                binding.gameView.onCellSelectionChanged(pos, selected)
-            }
-            onPieceMovedListener = { move ->
-                binding.gameView.onPieceMoved(move)
-            }
-            onPieceEatenListener = { pos ->
-                binding.gameView.onPieceEaten(pos)
-            }
-            onPiecePromotedListener = { pos ->
-                binding.gameView.onPiecePromoted(pos)
-            }
-            onGameOverListener = { winner ->
+            setOnGameOverHandler { winner ->
                 binding.gameView.onGameOver(winner)
             }
-            onGameResetListener = {
+            setOnGameResetHandler {
                 binding.gameView.onReset()
             }
 

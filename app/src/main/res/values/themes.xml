@@ -6,6 +6,9 @@
         <item name="whitePieceStrokeColor">@color/salmon</item>
         <item name="blackPieceFillColor">@color/black_200</item>
         <item name="blackPieceStrokeColor">@color/black_200</item>
+        <item name="possibleMoveCellColor">@color/success_green</item>
+        <item name="whiteDraughtsColor">@color/violet_300</item>
+        <item name="blackDraughtsColor">@color/sunglow</item>
     </style>
 
     <style name="Theme.ConsciousPancake.ActionBar" parent="ThemeOverlay.MaterialComponents.ActionBar" />
