@@ -1,13 +1,19 @@
 package ch.ffhs.conscious_pancake.ui.lobby
 
+import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import ch.ffhs.conscious_pancake.R
 import ch.ffhs.conscious_pancake.databinding.FragmentLobbyBinding
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -46,6 +52,18 @@ class LobbyFragment : Fragment() {
                 it?.let {
                     navigateToGame(it)
                 }
+            }
+
+            lobby.observe(viewLifecycleOwner) {
+                val tint =
+                    ColorStateList.valueOf(
+                        ContextCompat.getColor(requireContext(), R.color.picture_tint)
+                    )
+                val hostTint = if (it.host?.profilePictureUri == null) tint else null
+                ImageViewCompat.setImageTintList(binding.lobbyHostPicture, hostTint)
+
+                val player2Tint = if (it.player2?.profilePictureUri == null) tint else null
+                ImageViewCompat.setImageTintList(binding.lobbyPlayer2Picture, player2Tint)
             }
         }
 

@@ -27,7 +27,7 @@ class JoinGameFragment : Fragment(R.layout.fragment_join_game) {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentJoinGameBinding.inflate(inflater, container, false)
-        val adapter = JoinGameAdapter {
+        val adapter = JoinGameAdapter(requireContext()) {
             viewModel.joinLobby(it.id) { id -> navigateToLobby(id) }
         }
 

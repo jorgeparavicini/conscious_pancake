@@ -18,4 +18,5 @@
     <color name="grey_600">#383838</color>
     <color name="violet_300">#3B3561</color>
     <color name="sunglow">#F9CB40</color>
+    <color name="picture_tint">#bebebe</color>
 </resources>

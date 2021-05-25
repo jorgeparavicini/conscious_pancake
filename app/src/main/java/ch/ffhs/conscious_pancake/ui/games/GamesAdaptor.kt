@@ -3,7 +3,7 @@ package ch.ffhs.conscious_pancake.ui.games
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ch.ffhs.conscious_pancake.databinding.LobbyRowItemBinding
+import ch.ffhs.conscious_pancake.databinding.GamesRowItemBinding
 import ch.ffhs.conscious_pancake.vo.Game
 
 typealias OnGameClickedListener = (game: Game) -> Unit
@@ -41,7 +41,7 @@ class GamesAdaptor(private val itemClicked: OnGameClickedListener) : RecyclerVie
 
 
     class LobbyViewHolder(
-        private val binding: LobbyRowItemBinding,
+        private val binding: GamesRowItemBinding,
         private val clicked: OnGameClickedListener
     ) : RecyclerView.ViewHolder(
         binding.root
@@ -60,7 +60,7 @@ class GamesAdaptor(private val itemClicked: OnGameClickedListener) : RecyclerVie
 
             fun from(parent: ViewGroup, clicked: OnGameClickedListener): LobbyViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = LobbyRowItemBinding.inflate(layoutInflater, parent, false)
+                val binding = GamesRowItemBinding.inflate(layoutInflater, parent, false)
                 return LobbyViewHolder(binding, clicked)
             }
         }

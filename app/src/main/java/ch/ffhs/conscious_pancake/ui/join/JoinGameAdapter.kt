@@ -1,14 +1,20 @@
 package ch.ffhs.conscious_pancake.ui.join
 
+import android.content.Context
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
+import ch.ffhs.conscious_pancake.R
 import ch.ffhs.conscious_pancake.databinding.OpenGamesRowItemBinding
 import ch.ffhs.conscious_pancake.vo.Lobby
 
 typealias OnItemClickedListener = (lobby: Lobby) -> Unit
 
-class JoinGameAdapter(private val itemClicked: OnItemClickedListener) : RecyclerView.Adapter<JoinGameAdapter.JoinGameViewHolder>() {
+class JoinGameAdapter(private val context: Context, private val itemClicked: OnItemClickedListener) :
+        RecyclerView.Adapter<JoinGameAdapter.JoinGameViewHolder>() {
 
     private var data = listOf<Lobby>()
 
@@ -20,7 +26,7 @@ class JoinGameAdapter(private val itemClicked: OnItemClickedListener) : Recycler
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JoinGameViewHolder {
-        return JoinGameViewHolder.from(parent, itemClicked)
+        return JoinGameViewHolder.from(parent, itemClicked, context)
     }
 
     fun setData(value: List<Lobby>, updateRange: IntRange?) {
@@ -40,13 +46,20 @@ class JoinGameAdapter(private val itemClicked: OnItemClickedListener) : Recycler
     }
 
     class JoinGameViewHolder(
-        private val binding: OpenGamesRowItemBinding, private val clicked: OnItemClickedListener
+        private val binding: OpenGamesRowItemBinding,
+        private val clicked: OnItemClickedListener,
+        private val context: Context
     ) : RecyclerView.ViewHolder(
         binding.root
     ) {
 
         fun bind(item: Lobby) {
             binding.apply {
+                val tint = if (item.host?.profilePictureUri == null)
+                    ColorStateList.valueOf(ContextCompat.getColor(context, R.color.picture_tint))
+                else null
+
+                ImageViewCompat.setImageTintList(openGamesPicture, tint)
                 openGamesPicture.setImageURI(item.host?.profilePictureUri)
                 openGamesUsername.text = item.host?.username
                 openGamesSize.text = item.gameSize.displayName
@@ -57,10 +70,14 @@ class JoinGameAdapter(private val itemClicked: OnItemClickedListener) : Recycler
 
         companion object {
 
-            fun from(parent: ViewGroup, clicked: OnItemClickedListener): JoinGameViewHolder {
+            fun from(
+                parent: ViewGroup,
+                clicked: OnItemClickedListener,
+                context: Context
+            ): JoinGameViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = OpenGamesRowItemBinding.inflate(layoutInflater, parent, false)
-                return JoinGameViewHolder(binding, clicked)
+                return JoinGameViewHolder(binding, clicked, context)
             }
         }
     }
