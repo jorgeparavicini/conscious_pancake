@@ -33,7 +33,7 @@ class PieceAnimator(val piece: Piece) {
     var coordinates: Coordinates = Coordinates.from(piece.position)
         private set
 
-    var promotionProgress: Float = 0f
+    var promotionProgress: Float = if (piece.isDraught) 1f else 0f
         private set
 
     var selectionOpacity: Float = 0f
@@ -149,7 +149,7 @@ class PieceAnimator(val piece: Piece) {
     fun reset() {
         size = 1f
         coordinates = Coordinates.from(piece.position)
-        promotionProgress = 0f
+        promotionProgress = if (piece.isDraught) 1f else 0f
         selectionOpacity = 0f
         isVisible = true
         selectedPieces = null
