@@ -79,7 +79,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edit_username"
                         isVisible="@{profileViewModel.isEditing()}"
                         android:layout_width="match_parent"
@@ -125,7 +125,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edit_first_name"
                         isVisible="@{profileViewModel.isEditing()}"
                         android:layout_width="match_parent"
@@ -170,7 +170,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edit_last_name"
                         isVisible="@{profileViewModel.isEditing()}"
                         android:layout_width="match_parent"
