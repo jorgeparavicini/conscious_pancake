@@ -2,7 +2,6 @@ package ch.ffhs.conscious_pancake.vo
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Exclude
-import com.jorgeparavicini.draughts.model.core.Move
 import com.jorgeparavicini.draughts.model.core.Vector2
 import com.jorgeparavicini.draughts.model.enums.Player
 
@@ -12,15 +11,19 @@ data class RemoteMove(
     val player: Player,
     val didEat: Boolean
 ) {
+    @Suppress("unused")
     val fromX: Int
         get() = from.x
 
+    @Suppress("unused")
     val fromY: Int
         get() = from.y
 
+    @Suppress("unused")
     val toX: Int
         get() = to.x
 
+    @Suppress("unused")
     val toY: Int
         get() = to.y
 

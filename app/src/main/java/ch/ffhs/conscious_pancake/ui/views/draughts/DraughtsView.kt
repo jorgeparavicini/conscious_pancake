@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package ch.ffhs.conscious_pancake.ui.views.draughts
 
 import android.annotation.SuppressLint
@@ -31,9 +33,6 @@ class DraughtsView(context: Context, attrs: AttributeSet) : View(context, attrs)
                 }
             invalidate()
         }
-
-    val initialized: Boolean
-        get() = _draughts != null
 
     private var animators: List<PieceAnimator> = emptyList()
 
@@ -312,10 +311,6 @@ class DraughtsView(context: Context, attrs: AttributeSet) : View(context, attrs)
         val x = gameCoordinates.x / draughts.field.fieldSize * gameWidth + indentX + cellWidth / 2
         val y = gameCoordinates.y / draughts.field.fieldSize * gameHeight + indentY + cellHeight / 2
         return Coordinates(x, y)
-    }
-
-    fun onReset() {
-        resetAnimators()
     }
 
     fun onPieceSelectionChanged(piece: Piece, selected: Boolean) {

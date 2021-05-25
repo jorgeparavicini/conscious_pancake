@@ -11,7 +11,5 @@
         <item name="blackDraughtsColor">@color/sunglow</item>
     </style>
 
-    <style name="Theme.ConsciousPancake.ActionBar" parent="ThemeOverlay.MaterialComponents.ActionBar" />
-
     <style name="Theme.ConsciousPancake.Auth" parent="Theme.ConsciousPancake" />
 </resources>

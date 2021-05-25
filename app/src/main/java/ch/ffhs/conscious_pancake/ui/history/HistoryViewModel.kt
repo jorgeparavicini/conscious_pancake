@@ -55,9 +55,6 @@ class HistoryViewModel @Inject constructor(
             it.isEmpty() && isLoading.value == false
         }
 
-    var updatedRange = IntRange(0, 0)
-        private set
-
     init {
         reloadGames(CachePolicyType.ALWAYS)
     }
@@ -100,12 +97,6 @@ class HistoryViewModel @Inject constructor(
     private fun updateGames(newValue: List<Game>, didReload: Boolean = false) {
         val oldSize = history.value?.size
         val newSize = newValue.size
-
-        updatedRange = if (oldSize == null || newSize < oldSize) {
-            IntRange(0, newSize)
-        } else {
-            IntRange(oldSize, newSize)
-        }
 
         _canLoadMore.value = if (didReload) {
             newSize >= limit

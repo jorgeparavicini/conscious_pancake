@@ -7,11 +7,8 @@ import ch.ffhs.conscious_pancake.vo.Game
 import ch.ffhs.conscious_pancake.vo.RemoteMove
 import ch.ffhs.conscious_pancake.vo.Resource
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.jorgeparavicini.draughts.model.core.Move
-import com.jorgeparavicini.draughts.model.enums.Player
 import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
 import javax.inject.Inject

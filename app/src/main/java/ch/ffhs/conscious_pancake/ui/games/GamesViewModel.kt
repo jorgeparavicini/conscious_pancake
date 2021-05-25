@@ -52,9 +52,6 @@ class GamesViewModel @Inject constructor(
             it.isEmpty() && isLoading.value == false
         }
 
-    var updatedRange = IntRange(0, 0)
-        private set
-
     init {
         reloadGames(CachePolicyType.ALWAYS)
     }
@@ -98,13 +95,6 @@ class GamesViewModel @Inject constructor(
     private fun updateLobbies(newValue: List<Game>, didReload: Boolean = false) {
         val oldSize = lobbies.value?.size
         val newSize = newValue.size
-
-        // Update updated range
-        updatedRange = if (oldSize == null || newSize < oldSize) {
-            IntRange(0, newSize)
-        } else {
-            IntRange(oldSize, newSize)
-        }
 
         // Update can load more
         _canLoadMore.value = if (didReload) {

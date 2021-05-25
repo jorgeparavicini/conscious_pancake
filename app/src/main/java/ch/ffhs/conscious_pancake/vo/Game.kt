@@ -6,8 +6,6 @@ import ch.ffhs.conscious_pancake.vo.enums.GameSize
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Exclude
-import com.google.firebase.firestore.QueryDocumentSnapshot
-import com.jorgeparavicini.draughts.model.core.Move
 
 open class Game : BaseModel() {
 
@@ -84,6 +82,7 @@ open class Game : BaseModel() {
         }
 
     // Used implicitly by firebase
+    @Suppress("unused")
     val players: List<String>
         get() = listOf(hostId, player2Id)
 

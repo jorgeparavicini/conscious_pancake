@@ -4,7 +4,6 @@
     <string name="lobby">Lobby</string>
     <string name="profile">Profile</string>
     <string name="games_in_progress">Games in progress</string>
-    <string name="watch">watch</string>
     <string name="won">Won</string>
     <string name="lost">Lost</string>
     <string name="profile_image_description">Profile image description</string>
@@ -41,7 +40,6 @@
     <string name="game">Game</string>
     <string name="play">Play</string>
     <string name="player_label">You are playing %s</string>
-    <string name="winner_label">%s won!</string>
     <string name="winner">Winner</string>
     <string name="turns">Turns</string>
 </resources>

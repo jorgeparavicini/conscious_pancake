@@ -1,6 +1,6 @@
 package ch.ffhs.conscious_pancake.vo.enums
 
-enum class PartyType(val displayName: String, val index: Int) {
+enum class PartyType(private val displayName: String, val index: Int) {
 
     OPEN("Open", 0),
     CLOSED("Closed", 1);

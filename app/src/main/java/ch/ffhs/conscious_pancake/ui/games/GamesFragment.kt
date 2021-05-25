@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import ch.ffhs.conscious_pancake.databinding.FragmentGamesBinding
 import ch.ffhs.conscious_pancake.ui.home.HomeFragmentDirections
-import ch.ffhs.conscious_pancake.ui.join.JoinGameFragmentDirections
 import ch.ffhs.conscious_pancake.vo.Game
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
