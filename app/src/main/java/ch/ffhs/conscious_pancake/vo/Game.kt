@@ -109,7 +109,3 @@ open class Game : BaseModel() {
         }
     }
 }
-
-/*private fun Move.Companion.fromFirebase(snapshot: DocumentSnapshot): Move {
-
-}*/
