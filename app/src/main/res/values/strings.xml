@@ -37,7 +37,7 @@
     <string name="waiting_for_player_to_join">Waiting for player to join</string>
     <string name="join_game">Join Game</string>
     <string name="open_games">Open Games</string>
-    <string name="no_open_games_found">No open Games found</string>
+    <string name="no_open_games_found">No open Games found\nSwipe down to refresh</string>
     <string name="game">Game</string>
     <string name="play">Play</string>
     <string name="player_label">You are playing %s</string>
