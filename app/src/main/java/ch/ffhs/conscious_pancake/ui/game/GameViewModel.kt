@@ -76,13 +76,12 @@ class GameViewModel @Inject constructor(
         get() = _isLoading
 
     private fun initializeGame(game: Game) {
-        var i = 0
         game.remoteMoves.forEach { remoteMove ->
-            i += 1
-            Timber.i(i.toString())
             val piece = draughts.field.getPiece(remoteMove.from)!!
             draughts.nextMove(Move(piece, remoteMove.to))
         }
+
+        updateTurnLabel()
 
         gameResetHandler?.let { handler -> draughts.field.setOnGameResetHandler(handler) }
         draughts.setOnMoveExecutedHandler { from, to, player, didEat ->
@@ -143,6 +142,10 @@ class GameViewModel @Inject constructor(
     }
 
     private fun updateTurnLabel() {
+        if (draughts.winner != null) {
+            _turnLabel.value = "${draughts.winner} Won"
+            return
+        }
         if (isHost && draughts.currentPlayer == Player.BLACK ||
                 !isHost && draughts.currentPlayer == Player.WHITE
         ) {
@@ -153,6 +156,6 @@ class GameViewModel @Inject constructor(
     }
 
     private fun onGameOverHandler(winner: Player) {
-        _turnLabel.value = if (winner == Player.BLACK) "Black Won" else "White Won"
+        updateTurnLabel()
     }
 }
