@@ -76,13 +76,18 @@ class GameViewModel @Inject constructor(
         get() = _isLoading
 
     private fun initializeGame(game: Game) {
+        var i = 0
         game.remoteMoves.forEach { remoteMove ->
+            i += 1
+            Timber.i(i.toString())
             val piece = draughts.field.getPiece(remoteMove.from)!!
             draughts.nextMove(Move(piece, remoteMove.to))
         }
 
         gameResetHandler?.let { handler -> draughts.field.setOnGameResetHandler(handler) }
-        draughts.setOnMoveExecutedHandler { from, to, player -> onMoveExecuted(from, to, player) }
+        draughts.setOnMoveExecutedHandler { from, to, player, didEat ->
+            onMoveExecuted(from, to, player, didEat)
+        }
         draughts.field.setOnGameOverHandler { onGameOverHandler(it) }
     }
 
@@ -130,10 +135,10 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    private fun onMoveExecuted(from: Vector2, to: Vector2, player: Player) {
+    private fun onMoveExecuted(from: Vector2, to: Vector2, player: Player, didEat: Boolean) {
         if (player != localPlayer) return
         viewModelScope.launch {
-            gameRepo.addMoveToGame(gameId, RemoteMove(from, to, player))
+            gameRepo.addMoveToGame(gameId, RemoteMove(from, to, player, didEat))
         }
     }
 
