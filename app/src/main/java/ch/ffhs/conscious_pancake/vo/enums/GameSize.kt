@@ -5,7 +5,7 @@ import com.jorgeparavicini.draughts.model.enums.FieldSize
 enum class GameSize(val displayName: String, val index: Int, val fieldSize: FieldSize) {
 
     SIZE_8X8("8x8", 0, FieldSize.SMALL),
-    SIZE_6X6("10x10", 1, FieldSize.LARGE);
+    SIZE_10X10("10x10", 1, FieldSize.LARGE);
 
     override fun toString(): String {
         return displayName
