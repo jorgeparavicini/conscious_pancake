@@ -66,7 +66,6 @@ class JoinGameViewModel @Inject constructor(private val lobbyRepo: LobbyReposito
         }
     }
 
-    // TODO: Refactor
     fun reloadLobbies(cachePolicyType: CachePolicyType = CachePolicyType.REFRESH) {
         _isLoading.value = true
         viewModelScope.launch {

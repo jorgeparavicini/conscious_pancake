@@ -14,8 +14,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-// TODO: This view model could be refactored into a generic one with the Lobby view model
-
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     private val historyRepo: HistoryRepository,
@@ -108,8 +106,6 @@ class HistoryViewModel @Inject constructor(
         _isLoading.value = false
     }
 
-    // TODO: this should not be in this view model. Maybe add to User repo?
-    // Same exact function as in lobby view model needs refactoring
     private suspend fun fetchUsersForGames(games: List<Game>) = coroutineScope {
         return@coroutineScope games.map { game ->
             async {

@@ -28,7 +28,6 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() 
     }
 
     fun setData(value: List<Game>, updateRange: IntRange?) {
-        // TODO: This needs some serious rework
         val old = data
         data = value
         when {

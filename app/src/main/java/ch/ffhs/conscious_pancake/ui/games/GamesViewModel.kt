@@ -56,7 +56,6 @@ class GamesViewModel @Inject constructor(
         reloadGames(CachePolicyType.ALWAYS)
     }
 
-    // TODO: reload games and load more games can be refactored with callback.
     fun reloadGames(cachePolicyType: CachePolicyType = CachePolicyType.REFRESH) {
         _isLoading.value = true
         viewModelScope.launch {

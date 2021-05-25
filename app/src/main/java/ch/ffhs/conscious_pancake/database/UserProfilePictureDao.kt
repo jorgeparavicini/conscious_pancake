@@ -51,7 +51,6 @@ class UserProfilePictureDao @Inject constructor(@ApplicationContext private val 
         }
 
     override suspend fun uploadImage(userId: String, imageUri: Uri): Resource<Unit> =
-        // TODO: Extract string into resource file
         suspendCancellableCoroutine { ctx ->
             Timber.v("Uploading profile picture for user: $userId. Image: ${imageUri.fileName}")
 
