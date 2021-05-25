@@ -100,6 +100,7 @@ open class Game : BaseModel() {
                 val players = snapshot.get("players") as List<String>
                 hostId = players[0]
                 player2Id = players[1]
+                gameSize = GameSize.valueOf(snapshot.getString("gameSize")!!)
                 remoteMoves =
                     (snapshot.get("remoteMoves") as List<HashMap<String, Any>>).map { hashMap ->
                         RemoteMove.from(hashMap)
