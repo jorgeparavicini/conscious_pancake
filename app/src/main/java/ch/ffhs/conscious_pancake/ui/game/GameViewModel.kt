@@ -38,6 +38,10 @@ class GameViewModel @Inject constructor(
     val playerLabel: LiveData<String> =
         MutableLiveData(_playerLabel)
 
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String>
+        get() = _errorMessage
+
     private lateinit var _draughts: Draughts
     val draughts: Draughts
         get() = _draughts
@@ -157,5 +161,13 @@ class GameViewModel @Inject constructor(
 
     private fun onGameOverHandler(winner: Player) {
         updateTurnLabel()
+        if (localPlayer == winner) {
+            viewModelScope.launch {
+                val result = gameRepo.registerWinner(gameId, winner)
+                if (result.status == Status.ERROR) {
+                    _errorMessage.value = result.message!!
+                }
+            }
+        }
     }
 }

@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.jorgeparavicini.draughts.model.core.Move
+import com.jorgeparavicini.draughts.model.enums.Player
 import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
 import javax.inject.Inject
@@ -64,6 +65,30 @@ class GameDao @Inject constructor() : IGameDao {
             }.addOnFailureListener {
                 Timber.e("Could not add move to game. $it")
                 ctx.resume(Resource.error("Could not add move to game"))
+            }
+        }
+
+    suspend fun registerWinner(gameId: String, player: Player): Resource<Unit> =
+        suspendCancellableCoroutine { ctx ->
+            val doc = collection.document(gameId)
+            Firebase.firestore.runTransaction { transaction ->
+                val snapshot = transaction.get(doc)
+                val game = Game.fromFirebase(snapshot)
+                if (game.gameOver) return@runTransaction "Game is already over"
+                game.winner = player.toString()
+                transaction.set(doc, game)
+                null
+            }.addOnSuccessListener {
+                it?.let { error ->
+                    Timber.e(error)
+                    ctx.resume(Resource.error(error))
+                } ?: run {
+                    Timber.i("Successfully set $player as winner for game $gameId")
+                    ctx.resume(Resource.success())
+                }
+            }.addOnFailureListener {
+                Timber.e("Could not set winner $player for game $gameId. Exception $it")
+                ctx.resume(Resource.error("Could not set winner"))
             }
         }
 
