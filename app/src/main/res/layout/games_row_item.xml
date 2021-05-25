@@ -53,6 +53,7 @@
         app:srcCompat="@drawable/ic_account_circle_24px" />
 
     <TextView
+        android:id="@+id/player_2_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
