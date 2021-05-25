@@ -56,10 +56,7 @@ class JoinGameAdapter(private val itemClicked: OnItemClickedListener) :
             binding.apply {
                 val tint = if (item.host?.profilePictureUri == null)
                     ColorStateList.valueOf(
-                        ContextCompat.getColor(
-                            openGamesPicture.context,
-                            R.color.picture_tint
-                        )
+                        ContextCompat.getColor(openGamesPicture.context, R.color.picture_tint)
                     )
                 else null
 
