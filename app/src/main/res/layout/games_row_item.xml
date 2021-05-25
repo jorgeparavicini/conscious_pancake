@@ -1,84 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="80dp">
+    android:layout_height="160dp">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="15dp"
-        android:layout_weight="0.5"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent">
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/player_1_image"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_account_circle_24px" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/winner_picture"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:tint="#bebebe"
-                app:srcCompat="@drawable/ic_account_circle_24px" />
-
-            <TextView
-                android:id="@+id/player_1_name"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:maxLines="1"
-                android:scrollHorizontally="true" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/player_2_picture"
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:tint="#bebebe"
-                app:srcCompat="@drawable/ic_account_circle_24px" />
-
-            <TextView
-                android:id="@+id/player_2_name"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:maxLines="1"
-                android:scrollHorizontally="true" />
-
-        </LinearLayout>
-    </LinearLayout>
 
     <TextView
-        android:id="@+id/game_turn_label"
+        android:id="@+id/player_1_name"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0.2"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:ellipsize="end"
-        android:gravity="center"
+        android:gravity="start"
         android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        android:scrollHorizontally="true" />
+        android:scrollHorizontally="true"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        app:layout_constraintBottom_toBottomOf="@id/player_1_image"
+        app:layout_constraintEnd_toStartOf="@id/games_turns"
+        app:layout_constraintStart_toEndOf="@id/player_1_image"
+        app:layout_constraintTop_toTopOf="@id/player_1_image"
+        tools:text="Player 1" />
+
+    <TextView
+        android:id="@+id/games_vs_label"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/vs"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+        app:layout_constraintStart_toStartOf="@id/player_1_name"
+        app:layout_constraintTop_toBottomOf="@id/player_1_image" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/player_2_image"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/player_1_image"
+        app:layout_constraintTop_toBottomOf="@id/games_vs_label"
+        app:srcCompat="@drawable/ic_account_circle_24px" />
+
+    <TextView
+        android:id="@+id/player_2_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="start"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        app:layout_constraintBottom_toBottomOf="@id/player_2_image"
+        app:layout_constraintEnd_toStartOf="@id/games_turns"
+        app:layout_constraintStart_toStartOf="@id/player_1_name"
+        app:layout_constraintTop_toTopOf="@id/player_2_image"
+        tools:text="Player 2" />
+
+    <TextView
+        android:id="@+id/games_turns_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/turns"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+        app:layout_constraintBottom_toTopOf="@id/games_turns"
+        app:layout_constraintEnd_toStartOf="@id/play_game_button" />
+
+    <TextView
+        android:id="@+id/games_turns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/games_turns_label"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="5" />
 
     <Button
         android:id="@+id/play_game_button"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="30dp"
-        android:layout_weight="0.3"
-        android:text="@string/play" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/play"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

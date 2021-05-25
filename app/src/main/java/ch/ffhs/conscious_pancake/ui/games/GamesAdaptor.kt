@@ -1,8 +1,12 @@
 package ch.ffhs.conscious_pancake.ui.games
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
+import ch.ffhs.conscious_pancake.R
 import ch.ffhs.conscious_pancake.databinding.GamesRowItemBinding
 import ch.ffhs.conscious_pancake.vo.Game
 
@@ -49,9 +53,19 @@ class GamesAdaptor(private val itemClicked: OnGameClickedListener) : RecyclerVie
 
         fun bind(item: Game) {
             binding.apply {
+                val tint = ColorStateList.valueOf(
+                    ContextCompat.getColor(player1Image.context, R.color.picture_tint)
+                )
+                val player1Tint = if (item.player1?.profilePictureUri == null) tint else null
+                val player2Tint = if (item.player2?.profilePictureUri == null) tint else null
+                ImageViewCompat.setImageTintList(player1Image, player1Tint)
+                ImageViewCompat.setImageTintList(player2Image, player2Tint)
+
+                player1Image.setImageURI(item.player1?.profilePictureUri)
                 player1Name.text = item.player1?.username
+                player2Image.setImageURI(item.player2?.profilePictureUri)
                 player2Name.text = item.player2?.username
-                gameTurnLabel.text = item.remoteMoves.count().toString()
+                gamesTurns.text = item.remoteMoves.count().toString()
                 playGameButton.setOnClickListener { clicked(item) }
             }
         }
