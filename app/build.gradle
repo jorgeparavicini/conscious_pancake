@@ -78,9 +78,8 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
     kapt 'androidx.hilt:hilt-compiler:1.0.0'
 
-    // TODO: All versions from 26.3.0 onwards use a buggy firebase-auth-ktx version, that fails to compile
-    //  Update when it stops bugging out: https://youtrack.jetbrains.com/issue/KT-44375
-    implementation platform('com.google.firebase:firebase-bom:26.2.0')
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:28.0.1')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
