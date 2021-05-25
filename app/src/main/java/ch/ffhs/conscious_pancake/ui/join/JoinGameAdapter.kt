@@ -13,7 +13,7 @@ import ch.ffhs.conscious_pancake.vo.Lobby
 
 typealias OnItemClickedListener = (lobby: Lobby) -> Unit
 
-class JoinGameAdapter(private val context: Context, private val itemClicked: OnItemClickedListener) :
+class JoinGameAdapter(private val itemClicked: OnItemClickedListener) :
         RecyclerView.Adapter<JoinGameAdapter.JoinGameViewHolder>() {
 
     private var data = listOf<Lobby>()
@@ -26,7 +26,7 @@ class JoinGameAdapter(private val context: Context, private val itemClicked: OnI
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JoinGameViewHolder {
-        return JoinGameViewHolder.from(parent, itemClicked, context)
+        return JoinGameViewHolder.from(parent, itemClicked)
     }
 
     fun setData(value: List<Lobby>, updateRange: IntRange?) {
@@ -47,8 +47,7 @@ class JoinGameAdapter(private val context: Context, private val itemClicked: OnI
 
     class JoinGameViewHolder(
         private val binding: OpenGamesRowItemBinding,
-        private val clicked: OnItemClickedListener,
-        private val context: Context
+        private val clicked: OnItemClickedListener
     ) : RecyclerView.ViewHolder(
         binding.root
     ) {
@@ -56,7 +55,12 @@ class JoinGameAdapter(private val context: Context, private val itemClicked: OnI
         fun bind(item: Lobby) {
             binding.apply {
                 val tint = if (item.host?.profilePictureUri == null)
-                    ColorStateList.valueOf(ContextCompat.getColor(context, R.color.picture_tint))
+                    ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            openGamesPicture.context,
+                            R.color.picture_tint
+                        )
+                    )
                 else null
 
                 ImageViewCompat.setImageTintList(openGamesPicture, tint)
@@ -72,12 +76,11 @@ class JoinGameAdapter(private val context: Context, private val itemClicked: OnI
 
             fun from(
                 parent: ViewGroup,
-                clicked: OnItemClickedListener,
-                context: Context
+                clicked: OnItemClickedListener
             ): JoinGameViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = OpenGamesRowItemBinding.inflate(layoutInflater, parent, false)
-                return JoinGameViewHolder(binding, clicked, context)
+                return JoinGameViewHolder(binding, clicked)
             }
         }
     }

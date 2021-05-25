@@ -8,8 +8,6 @@ import ch.ffhs.conscious_pancake.repository.contracts.IGameRepository
 import ch.ffhs.conscious_pancake.vo.Game
 import ch.ffhs.conscious_pancake.vo.RemoteMove
 import ch.ffhs.conscious_pancake.vo.Resource
-import com.jorgeparavicini.draughts.model.core.Move
-import com.jorgeparavicini.draughts.model.enums.Player
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -55,7 +53,7 @@ class GameRepository @Inject constructor(
             return@withContext gameDao.addMoveToGame(gameId, move)
         }
 
-    suspend fun registerWinner(gameId: String, winner: Player): Resource<Unit> =
+    suspend fun registerWinner(gameId: String, winner: String): Resource<Unit> =
         withContext(Dispatchers.IO) {
             return@withContext gameDao.registerWinner(gameId, winner)
         }

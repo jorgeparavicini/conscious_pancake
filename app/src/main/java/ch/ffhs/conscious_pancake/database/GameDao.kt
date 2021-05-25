@@ -68,14 +68,14 @@ class GameDao @Inject constructor() : IGameDao {
             }
         }
 
-    suspend fun registerWinner(gameId: String, player: Player): Resource<Unit> =
+    suspend fun registerWinner(gameId: String, player: String): Resource<Unit> =
         suspendCancellableCoroutine { ctx ->
             val doc = collection.document(gameId)
             Firebase.firestore.runTransaction { transaction ->
                 val snapshot = transaction.get(doc)
                 val game = Game.fromFirebase(snapshot)
                 if (game.gameOver) return@runTransaction "Game is already over"
-                game.winner = player.toString()
+                game.winner = player
                 transaction.set(doc, game)
                 null
             }.addOnSuccessListener {

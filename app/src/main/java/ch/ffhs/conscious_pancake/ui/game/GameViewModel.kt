@@ -5,6 +5,8 @@ import ch.ffhs.conscious_pancake.repository.GameRepository
 import ch.ffhs.conscious_pancake.vo.Game
 import ch.ffhs.conscious_pancake.vo.RemoteMove
 import ch.ffhs.conscious_pancake.vo.enums.Status
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.jorgeparavicini.draughts.controllers.Controller
 import com.jorgeparavicini.draughts.model.core.Draughts
 import com.jorgeparavicini.draughts.model.core.GameResetHandler
@@ -48,7 +50,7 @@ class GameViewModel @Inject constructor(
 
     val game = Transformations.map(gameRepo.getLiveGame(gameId)) {
         if (it.status == Status.ERROR) {
-            Timber.e("Could not fetch lobbies")
+            Timber.e("Could not fetch live game")
             return@map null
         }
 
@@ -147,7 +149,9 @@ class GameViewModel @Inject constructor(
 
     private fun updateTurnLabel() {
         if (draughts.winner != null) {
-            _turnLabel.value = "${draughts.winner} Won"
+            val user = Firebase.auth.currentUser!!.uid
+            val winnerId = getUserIdForPlayer(draughts.winner!!)
+            _turnLabel.value = if (winnerId == user) "You won" else "You lost"
             return
         }
         if (isHost && draughts.currentPlayer == Player.BLACK ||
@@ -163,11 +167,15 @@ class GameViewModel @Inject constructor(
         updateTurnLabel()
         if (localPlayer == winner) {
             viewModelScope.launch {
-                val result = gameRepo.registerWinner(gameId, winner)
+                val result = gameRepo.registerWinner(gameId, getUserIdForPlayer(winner))
                 if (result.status == Status.ERROR) {
                     _errorMessage.value = result.message!!
                 }
             }
         }
+    }
+
+    private fun getUserIdForPlayer(player: Player): String {
+        return if (player == Player.BLACK) game.value!!.hostId else game.value!!.player2Id
     }
 }

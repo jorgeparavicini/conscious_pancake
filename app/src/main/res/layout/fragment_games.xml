@@ -34,6 +34,7 @@
                     android:padding="32dp"
                     android:text="@string/no_games_lobby"
                     android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -42,7 +43,6 @@
 
 
                 <androidx.core.widget.NestedScrollView
-                    isVisible="@{lobbyViewModel.hasGames}"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -59,11 +59,12 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="16dp"
                             android:text="@string/games_in_progress"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <androidx.recyclerview.widget.RecyclerView
+                            isVisible="@{lobbyViewModel.hasGames}"
                             android:id="@+id/lobby_list"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"

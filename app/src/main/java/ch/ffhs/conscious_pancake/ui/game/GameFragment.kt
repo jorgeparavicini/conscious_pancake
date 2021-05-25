@@ -44,7 +44,7 @@ class GameFragment : Fragment() {
             game.observe(viewLifecycleOwner) { game ->
                 if (game == null) return@observe
                 if (!binding.gameView.initialized) {
-                    binding.gameView.draughts = draughts!!
+                    binding.gameView.draughts = draughts
                 }
             }
 

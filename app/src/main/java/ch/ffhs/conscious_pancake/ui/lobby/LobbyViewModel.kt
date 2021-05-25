@@ -27,6 +27,8 @@ class LobbyViewModel @Inject constructor(
     val isHost: Boolean
         get() = savedStateHandle.get<Boolean>(IS_HOST_ARG_NAME)!!
 
+    private var hasGameStarted = false
+
     private val _lobbyDestroyed = MutableLiveData(false)
     val lobbyDestroyed: LiveData<Boolean>
         get() = _lobbyDestroyed
@@ -57,7 +59,11 @@ class LobbyViewModel @Inject constructor(
     }
 
     val gameStarted = Transformations.map(lobby) {
-        it?.gameId
+        if (hasGameStarted) return@map null
+        it?.gameId?.let { game ->
+            hasGameStarted = true
+            return@map game
+        }
     }
 
     fun leaveLobby() {
